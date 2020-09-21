@@ -2,17 +2,7 @@
   "name": "kalasoo.github.io",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "dependencies": {
-    "airtable": "^0.8.1",
-    "pug": "^2.0.0-beta6"
-  },
-  "devDependencies": {
-    "browser-sync": "^2.18.5",
-    "gulp": "^3.9.1",
-    "gulp-pug": "^3.2.0",
-    "marked": "^0.8.0"
-  },
+  "main": "gulpfile.js",
   "scripts": {
     "dev": "gulp dev",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -21,10 +11,20 @@
     "type": "git",
     "url": "git+https://github.com/kalasoo/kalasoo.github.io.git"
   },
-  "author": "",
+  "author": "kalasoo",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/kalasoo/kalasoo.github.io/issues"
   },
-  "homepage": "https://github.com/kalasoo/kalasoo.github.io#readme"
+  "homepage": "https://github.com/kalasoo/kalasoo.github.io#readme",
+  "dependencies": {
+    "airtable": "^0.10.0",
+    "pug": "^3.0.0"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.26.12",
+    "gulp": "^4.0.2",
+    "gulp-pug": "^4.0.1",
+    "marked": "^1.1.1"
+  }
 }
