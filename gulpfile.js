@@ -1,9 +1,14 @@
-const gulp          = require('gulp')
+const {
+    series, parallel, watch, src, dest
+}                   = require('gulp')
 const pug           = require('gulp-pug')
 const marked        = require('marked')
 const browserSync   = require('browser-sync').create()
-const Airtable      = require('./airtable.js')
-const base          = Airtable.base('appp11u59wv6QMEUV')
+const Airtable      = require('airtable')
+const key           = require('./airtable.js').key
+const base          = new Airtable({
+    appKey: key
+}).base('appp11u59wv6QMEUV')
 
 function convertStory (story) {
     let _story = {
@@ -33,34 +38,69 @@ function loadStories () {
     }).catch(err => console.log)
 }
 
-gulp.task('index', function() {
+// gulp.task('index', function() {
+//     return loadStories()
+//         .then((data) => {
+//             return gulp.src('src/index.pug')
+//                 .pipe(pug({
+//                     data: data,
+//                     pretty: true
+//                 }))
+//                 .pipe(gulp.dest('./'))
+//                 .pipe(browserSync.stream())
+//         })
+// })
+
+// gulp.task('resume', function() {
+//     return gulp.src('src/resume.pug')
+//         .pipe(pug({
+//             pretty: true
+//         }))
+//         .pipe(gulp.dest('./'))
+//         .pipe(browserSync.stream())
+// })
+
+
+// gulp.task('dev', ['index', 'resume'], () => {
+//     browserSync.init({
+//         server: {
+//             baseDir: './'
+//         }
+//     })
+//     gulp.watch(['src/*', 'style.css'], ['index', 'resume'])
+// })
+
+function index() {
     return loadStories()
         .then((data) => {
-            return gulp.src('src/index.pug')
+            return src('src/index.pug')
                 .pipe(pug({
                     data: data,
                     pretty: true
                 }))
-                .pipe(gulp.dest('./'))
+                .pipe(dest('./'))
                 .pipe(browserSync.stream())
-        })
-})
+    })
+}
 
-gulp.task('resume', function() {
-    return gulp.src('src/resume.pug')
+function resume() {
+    return src('src/resume.pug')
         .pipe(pug({
             pretty: true
         }))
-        .pipe(gulp.dest('./'))
+        .pipe(dest('./'))
         .pipe(browserSync.stream())
-})
+}
 
-
-gulp.task('dev', ['index', 'resume'], () => {
+function dev() {
     browserSync.init({
         server: {
             baseDir: './'
         }
     })
-    gulp.watch(['src/*', 'style.css'], ['index', 'resume'])
-})
+    watch(['src/*', 'style.css'], parallel(index, resume))
+}
+
+exports.dev = series(parallel(index, resume), dev)
+exports.index = index
+exports.resume = resume
