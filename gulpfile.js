@@ -7,7 +7,7 @@ const browserSync   = require('browser-sync').create()
 const Airtable      = require('airtable')
 const key           = require('./airtable.js').key
 const base          = new Airtable({
-    appKey: key
+    apiKey: key
 }).base('appp11u59wv6QMEUV')
 
 function convertStory (story) {
