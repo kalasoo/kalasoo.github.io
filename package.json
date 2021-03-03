@@ -19,7 +19,7 @@
   "homepage": "https://github.com/kalasoo/kalasoo.github.io#readme",
   "dependencies": {
     "airtable": "^0.10.0",
-    "pug": "^3.0.0"
+    "pug": "^3.0.1"
   },
   "devDependencies": {
     "browser-sync": "^2.26.12",
