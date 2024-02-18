@@ -51,8 +51,18 @@
                 text-align: left;
                 padding: 0.3em 1em;
             }
+            table td blockquote {
+                font-size: .9em;
+                border-left: 3px solid lightgray;
+            }
             thead tr, tbody tr:nth-child(even) {
-                background-color: #f1f1f1;
+                background-color: #f5f5f5;
+            }
+            .links {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 1em;
             }
         </style>
     </head>
@@ -68,23 +78,13 @@
         </section>
 
         <section>
-            <h2>About</h2>
-            <p>My name is Ming Yin. My work is dedicated to unleashing everyone's creativity and curiosity, constantly inspiring creation and consumption, and sustaining and promoting civilization.</p>
-            <p>我叫阴明，我的工作致力于释放所有人的创造力与好奇心，不断激发创作与消费，存续和发扬文明。</p>
-        </section>
-        
-        <section>
-            <h2>Contact</h2>
-            <ul>
-                <li>WeChat: kalasoo</li>
-                <li>Telegram: kalasoo</li>
-                <li>X: <a href="https://x.com/kalasoo">kalasoo</a></li>
-                <li>Podcast: <a href="https://www.xiaoyuzhoufm.com/podcast/603d875730638eea2cef9e5b">浅薄的假象</a></li>
-            </ul>
+            <h3>About</h3>
+            <p>My name is Ming Yin. My work is dedicated to unleashing everyone's creativity and curiosity, constantly inspiring creation and consumption, and sustaining and promoting civilization. >> <a href="https://kalasoo.notion.site">Learn more</a></p>
+            <p>我叫阴明，我的工作致力于释放所有人的创造力与好奇心，不断激发创作与消费，存续和发扬文明。>> <a href="https://kalasoo.notion.site">了解更多</a></p>
         </section>
 
         <section>
-            <h2><code>whoami</code></h2>
+            <h3><code>whoami</code></h3>
             <table>
                 <thead>
                     <tr>
@@ -107,10 +107,26 @@
                     </tr>
                     <tr>
                         <th>2019-Now</th>
-                        <td>Product Manager, <em>ByteDance Ltd.</em> Wiki @ Search, New Formats @ TikTok, Content Discovery and Ecosystem @ CapCut</td>
+                        <td>
+                            Product Manager, <em>ByteDance Ltd.</em>
+                            <blockquote>Wiki & Knowlege Graph @ Search <br> New Formats @ TikTok <br> Content Discovery and Ecosystem @ CapCut</blockquote>
+                        </td>
                     </tr>
                 </tbody>
             </table>
+        </section>
+
+
+        <section>
+            <h3>Contact</h3>
+            <div class="links">
+                <div class="link">WeChat: kalasoo</div>
+                <div class="link">Telegram: kalasoo</div>
+                <div class="link"><a href="mailto:ym.kalasoo@gmail.com">Email</a></div>
+                <div class="link"><a href="https://x.com/kalasoo">X (Twitter)</a></div>
+                <div class="link"><a href="https://github.com/kalasoo">GitHub</a></div>
+                <div class="link"><a href="https://www.xiaoyuzhoufm.com/podcast/603d875730638eea2cef9e5b">Podcast</a></div>
+            </div>
         </section>
         
         <script src="" async defer></script>
