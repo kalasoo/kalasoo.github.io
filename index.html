@@ -74,16 +74,23 @@
                 background-color: #eaeaea;
             }
 
+            .notes {
+                display: grid;
+                grid-gap: 20px;
+                grid-template-columns: repeat(2, 50%);
+            }
+
+            @media screen and (max-width: 600px) {
+                .notes {
+                    grid-template-columns: auto;
+                }
+            }
+
             .note {
-                display: inline-block;
-                width: 40%;
-                margin: 20px 10px 20px 0;
                 padding: 20px;
                 background-color: #f5f5f5;
                 border-radius: 5px;
                 transition: all 0.3s ease-in-out;
-                box-sizing: border-box;
-                vertical-align: middle;
             }
 
             .note:hover {
@@ -174,16 +181,18 @@
 
         <section>
             <h3>Notes</h3>
-            <article class="note">
-                <img src="/creativity.png" alt="Preserve the creativity!">
-                <p><strong>Preserve the creativity!</strong></p>
-                <p>保持想象力是 2024 年我给自己的任务。我们当下所面对的世界是高度不确定性的，所有的“限制条件”都可能在未来的几个月、几年内发生巨大的变化，想象力是在高度不确定性的时候很好的工具。</p>
-                <p>想象力需要<strong>充足的知识储备和信息</strong>，才能形成跳跃性的链接；想象力还需要<strong>积极的心态</strong>，保持自己以乐观的态度去面对不可能并从中找出机会；想象力也需要<strong>耐心</strong>，思考可能性与按章办事放到持之以恒上同样有难度。</p>
-            </article>
-            <article class="note">
-                <iframe width="100%" height="315" src="https://www.youtube.com/embed/ADKrz0L4JcQ?si=5M8PVPh5gDDzO6k9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                <p>2020年9月，在 <a href="https://www.vogue.com/article/i-love-new-york-fall-collections">Vogue</a> 发布的一段记录 New York 的视频，它展示了一个城市的魅力与个性，尤其是在特殊的历史阶段，一个城市依然可以有卓越的生命力表达和自我颠覆。音乐犹如这个城市的脉搏一般，偶尔沉稳静谧，偶尔欢脱悠扬，最终是一剂振奋的号角与鼓声让所有身处其中的人知道，我们还活着，活在这个城市。</p>
-            </article>
+            <div class="notes">
+                <article class="note">
+                    <img src="/creativity.png" alt="Preserve the creativity!">
+                    <p><strong>Preserve the creativity!</strong></p>
+                    <p>保持想象力是 2024 年我给自己的任务。我们当下所面对的世界是高度不确定性的，所有的“限制条件”都可能在未来的几个月、几年内发生巨大的变化，想象力是在高度不确定性的时候很好的工具。</p>
+                    <p>想象力需要<strong>充足的知识储备和信息</strong>，才能形成跳跃性的链接；想象力还需要<strong>积极的心态</strong>，保持自己以乐观的态度去面对不可能并从中找出机会；想象力也需要<strong>耐心</strong>，思考可能性与按章办事放到持之以恒上同样有难度。</p>
+                </article>
+                <article class="note">
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/ADKrz0L4JcQ?si=5M8PVPh5gDDzO6k9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <p>2020年9月，在 <a href="https://www.vogue.com/article/i-love-new-york-fall-collections">Vogue</a> 发布的一段记录 New York 的视频，它展示了一个城市的魅力与个性，尤其是在特殊的历史阶段，一个城市依然可以有卓越的生命力表达和自我颠覆。音乐犹如这个城市的脉搏一般，偶尔沉稳静谧，偶尔欢脱悠扬，最终是一剂振奋的号角与鼓声让所有身处其中的人知道，我们还活着，活在这个城市。</p>
+                </article>
+            </div>
         </section>
         
         <script defer>
