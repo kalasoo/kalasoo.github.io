@@ -1,6 +1,6 @@
 +++
 title = '贪嗔痴｜3 Poisons'
-date = 2024-10-07T14:10:06+08:00
+date = '2024-10-08'
 draft = false
 +++
 

@@ -1,6 +1,7 @@
 +++
 title = "About"
-date = "2024-10-08"
+date = "2024-10-01"
+draft = false
 +++
 
 ---
