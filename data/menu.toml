@@ -8,9 +8,18 @@ title = "all posts"
   show_more_url = "posts"
 
 [[entries]]
-title = "about"
-url = "about"
+title = "about me"
 
-[[entries]]
-title = "rss"
-url = "index.xml"
+  [[entries.entries]]
+  title = "about"
+  url = "about"
+
+  [[entries.entries]]
+  title = "Telegram"
+  url = "https://t.me/kalasoo_channel"
+
+  [[entries.entries]]
+  title = "rss"
+  url = "index.xml"
+
+  
