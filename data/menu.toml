@@ -1,4 +1,8 @@
 [[entries]]
+title = "about"
+url = "about"
+
+[[entries]]
 title = "all posts"
 
   [entries.post_list]
@@ -6,16 +10,13 @@ title = "all posts"
   show_more = true
   show_more_text = "See archive..."
   show_more_url = "posts"
+  section = 'posts'
 
 [[entries]]
-title = "about me"
+title = "subscribe"
 
   [[entries.entries]]
-  title = "about"
-  url = "about"
-
-  [[entries.entries]]
-  title = "Telegram"
+  title = "telegram"
   url = "https://t.me/kalasoo_channel"
 
   [[entries.entries]]
