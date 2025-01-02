@@ -1,0 +1,21 @@
+@import "../../themes/nostyleplease/assets/css/main.scss";
+
+article {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+article i, article blockquote {
+    font-family:  -apple-system, serif;
+}
+
+article hr, article code, article .post-meta {
+    font-family: monospace;
+}
+
+p, ul li, ol li {
+    line-height: 1.6em;
+}
+
+.w {
+    max-width: 800px;
+}
