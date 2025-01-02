@@ -6,12 +6,9 @@ draft = false
 
 > We can only see a short distance ahead, but we can see plenty there that needs to be done. - Alan Turing
 
-
 我叫**阴明**，我的工作致力于释放所有人的创造力与好奇心，不断激发创作与消费，存续人类文明。
 
 My name is **Yin Ming**. My work is dedicated to unleashing everyone's creativity and curiosity, continually inspiring creation and consumption to sustain human civilization.
-
-
 
 ### Experience
 
@@ -24,11 +21,9 @@ My name is **Yin Ming**. My work is dedicated to unleashing everyone's creativit
 | 2015-2019 | Founder and CEO, Xitu Inc.| [掘金](https://juejin.cn) |
 | 2019-2024 | Product Lead, ByteDance Ltd. | 百科, TikTok, CapCut |
 
-
 ### Contact
 
 WeChat: kalasoo, [Telegram](https://t.me/kalasoo), [Email](mailto:ym.kalasoo@gmail.com), [X](https://x.com/kalasoo)
-
 
 ### Addiction
 
