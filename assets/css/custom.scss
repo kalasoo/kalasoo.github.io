@@ -12,8 +12,16 @@ article hr, article code, article .post-meta {
     font-family: monospace;
 }
 
+article h1, article h2, article h3, article h4, article h5, article h6 {
+    margin-top: 2em;
+}
+
 p, ul li, ol li {
     line-height: 1.6em;
+}
+
+blockquote {
+    margin: 1em 0;
 }
 
 .w {
