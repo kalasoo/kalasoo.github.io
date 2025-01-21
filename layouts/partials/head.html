@@ -21,5 +21,7 @@
   <link rel="stylesheet" href="{{ $style.Permalink | relURL }}" integrity="{{ $style.Data.Integrity }}" />
 
   {{ if .Params.mathjax }} {{ partial "mathjax.html" . }} {{ end }}
+
+  <!-- Google Analytics -->
+  {{ template "_internal/google_analytics.html" . }}
 </head>
-  
