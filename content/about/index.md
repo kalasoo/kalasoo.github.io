@@ -8,7 +8,7 @@ draft = false
 
 我叫**阴明**，我的工作致力于寻找人类与科技健康共存的方法，存续人类文明。
 
-My name is **Yin Ming**. My work focuses on exploring sustainable ways for humanity and technology to coexist in a healthy manner, with the ultimate aim of preserving human civilization.
+My name is **Yin Ming**, and my work is dedicated to discovering ways for humanity and technology to coexist in harmony, thereby preserving human civilization.
 
 
 ### Experience
