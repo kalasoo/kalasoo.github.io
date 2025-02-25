@@ -13,7 +13,7 @@ My name is **Yin Ming**, and my work is dedicated to discovering ways for humani
 
 ### Experience
 
-👉 [完整时间线｜Full Timeline](https://kalasoo.notion.site/)
+👉 [完整时间线｜Full Timeline](https://kalasoo.notion.site/About-me-69c1472fcb7946609bf6c96daced37a5?pvs=4)
 
 | Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Experience | Projects |
 |------------|------------|----------|
