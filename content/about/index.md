@@ -45,6 +45,6 @@ WeChat: kalasoo, [Telegram](https://t.me/kalasoo), [Email](mailto:ym.kalasoo@gma
 | | | |
 | 2023 | 37% | NVDA, PDD |
 | 2024 | 46% | TSLA, HOOD |
-| 2025 | 34% (1.1 ~ 2.14) | XIACY, HOOD, BILI |
+| 2025 | 41% (1.1 ~ 3.6) | XIACY, HOOD, BILI |
 
 \* The information provided here does not constitute investment advice.
