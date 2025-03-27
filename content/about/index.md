@@ -21,11 +21,11 @@ My name is **Yin Ming**, and my work is dedicated to discovering ways for humani
 | 2013-2014 | Computer Science, The University of Cambridge | [Generalized Cut Set](https://www.dropbox.com/scl/fi/zw5njee911ib1qlsfy6bk/MPhil_Presentation_Ming.pdf) |
 | 2015-2019 | Founder and CEO, Xitu Inc.| [掘金](https://juejin.cn) |
 | 2019-2024 | Product Lead, ByteDance Ltd. | [百科](https://baike.com), [TikTok](https://tiktok.com), [CapCut](https://capcut.com) |
-| 2025- | Founder and Maker, See U | [See U](https://seeu.lifestyle) |
+| 2025- | Founder and Maker, See U | [SeeU](https://seeu.lifestyle) |
 
 ### Contact
 
-WeChat: kalasoo, [Telegram](https://t.me/kalasoo), [Email](mailto:ym.kalasoo@gmail.com), [X](https://x.com/kalasoo)
+WeChat: kalasoo, [Telegram](https://t.me/kalasoo), [Email](mailto:ym.kalasoo@gmail.com), [X](https://x.com/kalasoo), [GitHub](https://github.com/kalasoo)
 
 ### Addiction
 
@@ -48,3 +48,8 @@ WeChat: kalasoo, [Telegram](https://t.me/kalasoo), [Email](mailto:ym.kalasoo@gma
 | 2025 | 41% (1.1 ~ 3.6) | XIACY, HOOD, BILI |
 
 \* The information provided here does not constitute investment advice.
+
+
+### Coding
+
+[![GitHub Activity](https://ghchart.rshah.org/kalasoo)](https://github.com/kalasoo)
