@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "custom.css",
-	"sourceRoot": "/Users/kalasoo/Documents/GitHub/kalasoo.github.io",
+	"sourceRoot": "/Users/kalasoo/Projects/blog/kalasoo.github.io",
 	"sources": [
 		"assets/css/custom.scss",
 		"themes/nostyleplease/assets/css/main.scss"

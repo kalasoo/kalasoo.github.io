@@ -30,6 +30,294 @@ int main(int argc, char **argv) {
   printf(&#34;New speed:     %2d\n&#34;, speed);
   return 0;
 }
+Test for Java
+import java.util.Map;
+import java.util.TreeSet;
+ 
+public class GetEnv {
+  /**
+   * let&#39;s test generics
+   * @param args the command line arguments
+   */
+  public static void main(String[] args) {
+    // get a map of environment variables
+    Map&lt;String, String&gt; env = System.getenv();
+    // build a sorted set out of the keys and iterate
+    for(String k: new TreeSet&lt;String&gt;(env.keySet())) {
+      System.out.printf(&#34;%s = %s\n&#34;, k, env.get(k));
+    }
+  }    
+}
+Test for Perl
+#!perl -w
+ 
+# Time-stamp: &lt;2002/04/06, 13:12:13 (EST), maverick, csvformat.pl&gt;
+# Two pass CSV file to table formatter
+ 
+$delim = $#ARGV &gt;= 1 ? $ARGV[1] : &#39;,&#39;;
+print STDERR &#34;Split pattern: $delim\n&#34;;
+ 
+# first pass
+open F, &#34;&lt;$ARGV[0]&#34; or die;
+while(&lt;F&gt;)
+{
+  chomp;
+  $i = 0;
+  map { $max[$_-&gt;[1]] = $_-&gt;[0] if $_-&gt;[0] &gt; ($max[$_-&gt;[1]] || 0) }
+    (map {[length $_, $i&#43;&#43;]} split($delim));
+}
+close F;
+ 
+print STDERR &#39;Field width:   &#39;, join(&#39;, &#39;, @max), &#34;\n&#34;;
+print STDERR join(&#39; &#39;, map {&#39;-&#39; x $_} @max);
+ 
+# second pass
+open F, &#34;&lt;$ARGV[0]&#34; or die;
+while(&lt;F&gt;)
+  {
+  chomp;
+  $i = 0;
+  map { printf(&#34;%-$max[$_-&gt;[1]]s &#34;, $_-&gt;[0]) }
+    (map {[$_, $i&#43;&#43;]} split($delim));
+  print &#34;\n&#34;;
+}
+close F;
+Test for Python
+# test python (sample from offlineimap)
+ 
+class ExitNotifyThread(Thread):
+    &#34;&#34;&#34;This class is designed to alert a &#34;monitor&#34; to the fact that a thread has
+    exited and to provide for the ability for it to find out why.&#34;&#34;&#34;
+    def run(self):
+        global exitthreads, profiledir
+        self.threadid = thread.get_ident()
+        try:
+            if not profiledir:          # normal case
+                Thread.run(self)
+            else:
+                try:
+                    import cProfile as profile
+                except ImportError:
+                    import profile
+                prof = profile.Profile()
+                try:
+                    prof = prof.runctx(&#34;Thread.run(self)&#34;, globals(), locals())
+                except SystemExit:
+                    pass
+                prof.dump_stats( \
+                            profiledir &#43; &#34;/&#34; &#43; str(self.threadid) &#43; &#34;_&#34; &#43; \
+                            self.getName() &#43; &#34;.prof&#34;)
+        except:
+            self.setExitCause(&#39;EXCEPTION&#39;)
+            if sys:
+                self.setExitException(sys.exc_info()[1])
+                tb = traceback.format_exc()
+                self.setExitStackTrace(tb)
+        else:
+            self.setExitCause(&#39;NORMAL&#39;)
+        if not hasattr(self, &#39;exitmessage&#39;):
+            self.setExitMessage(None)
+ 
+        if exitthreads:
+            exitthreads.put(self, True)
+ 
+    def setExitCause(self, cause):
+        self.exitcause = cause
+    def getExitCause(self):
+        &#34;&#34;&#34;Returns the cause of the exit, one of:
+        &#39;EXCEPTION&#39; -- the thread aborted because of an exception
+        &#39;NORMAL&#39; -- normal termination.&#34;&#34;&#34;
+        return self.exitcause
+    def setExitException(self, exc):
+        self.exitexception = exc
+    def getExitException(self):
+        &#34;&#34;&#34;If getExitCause() is &#39;EXCEPTION&#39;, holds the value from
+        sys.exc_info()[1] for this exception.&#34;&#34;&#34;
+        return self.exitexception
+    def setExitStackTrace(self, st):
+        self.exitstacktrace = st
+    def getExitStackTrace(self):
+        &#34;&#34;&#34;If getExitCause() is &#39;EXCEPTION&#39;, returns a string representing
+        the stack trace for this exception.&#34;&#34;&#34;
+        return self.exitstacktrace
+    def setExitMessage(self, msg):
+        &#34;&#34;&#34;Sets the exit message to be fetched by a subsequent call to
+        getExitMessage.  This message may be any object or type except
+        None.&#34;&#34;&#34;
+        self.exitmessage = msg
+    def getExitMessage(self):
+        &#34;&#34;&#34;For any exit cause, returns the message previously set by
+        a call to setExitMessage(), or None if there was no such message
+        set.&#34;&#34;&#34;
+        return self.exitmessage
+Test for Bash
+#!/bin/bash
+cd $ROOT_DIR
+DOT_FILES=&#34;lastpass weechat ssh Xauthority&#34;
+for dotfile in $DOT_FILES; do conform_link &#34;$DATA_DIR/$dotfile&#34; &#34;.$dotfile&#34;; done
+ 
+# TODO: refactor with suffix variables (or common cron values)
+ 
+case &#34;$PLATFORM&#34; in
+    linux)
+        #conform_link &#34;$CONF_DIR/shell/zshenv&#34; &#34;.zshenv&#34;
+        crontab -l &gt; $ROOT_DIR/tmp/crontab-conflict-arch
+        cd $ROOT_DIR/$CONF_DIR/cron
+        if [[ &#34;$(diff ~/tmp/crontab-conflict-arch crontab-current-arch)&#34; == &#34;&#34;
+            ]];
+            then # no difference with current backup
+                logger &#34;$LOG_PREFIX: crontab live settings match stored &#34;\
+                    &#34;settings; no restore required&#34;
+                rm ~/tmp/crontab-conflict-arch
+            else # current crontab settings in file do not match live settings
+                crontab $ROOT_DIR/$CONF_DIR/cron/crontab-current-arch
+                logger &#34;$LOG_PREFIX: crontab stored settings conflict with &#34;\
+                    &#34;live settings; stored settings restored. &#34;\
+                    &#34;Previous settings recorded in ~/tmp/crontab-conflict-arch.&#34;
+        fi
+    ;;
+Test for Haskell
+{-# LANGUAGE OverloadedStrings #-}
+module Main where
+ 
+--import Prelude hiding (id)
+--import Control.Category (id)
+import Control.Arrow ((&gt;&gt;&gt;), (***), arr)
+import Control.Monad (forM_)
+-- import Data.Monoid (mempty, mconcat)
+ 
+-- import System.FilePath
+ 
+import Hakyll
+ 
+ 
+main :: IO ()
+main = hakyll $ do
+ 
+    route   &#34;css/*&#34; $ setExtension &#34;css&#34;
+    compile &#34;css/*&#34; $ byExtension (error &#34;Not a (S)CSS file&#34;)
+        [ (&#34;.css&#34;,  compressCssCompiler)
+        , (&#34;.scss&#34;, sass)
+        ]
+ 
+    route   &#34;js/**&#34; idRoute
+    compile &#34;js/**&#34; copyFileCompiler
+ 
+    route   &#34;img/*&#34; idRoute
+    compile &#34;img/*&#34; copyFileCompiler
+ 
+    compile &#34;templates/*&#34; templateCompiler
+ 
+    forM_ [&#34;test.md&#34;, &#34;index.md&#34;] $ \page -&gt; do
+        route   page $ setExtension &#34;html&#34;
+        compile page $ pageCompiler
+            &gt;&gt;&gt; applyTemplateCompiler &#34;templates/default.html&#34;
+            &gt;&gt;&gt; relativizeUrlsCompiler
+ 
+sass :: Compiler Resource String
+sass = getResourceString &gt;&gt;&gt; unixFilter &#34;sass&#34; [&#34;-s&#34;, &#34;--scss&#34;]
+                         &gt;&gt;&gt; arr compressCss
+Test for PHP
+&lt;?php
+require_once($GLOBALS[&#39;g_campsiteDir&#39;]. &#34;/$ADMIN_DIR/country/common.php&#34;);
+require_once($GLOBALS[&#39;g_campsiteDir&#39;]. &#34;/classes/SimplePager.php&#34;);
+camp_load_translation_strings(&#34;api&#34;);
+ 
+$f_country_language_selected = camp_session_get(&#39;f_language_selected&#39;, &#39;&#39;);
+$f_country_offset = camp_session_get(&#39;f_country_offset&#39;, 0);
+if (empty($f_country_language_selected)) {
+    $f_country_language_selected = null;
+}
+$ItemsPerPage = 20;
+$languages = Language::GetLanguages(null, null, null, array(), array(), true);
+$numCountries = Country::GetNumCountries($f_country_language_selected);
+ 
+$pager = new SimplePager($numCountries, $ItemsPerPage, &#34;index.php?&#34;);
+ 
+$crumbs = array();
+$crumbs[] = array(getGS(&#34;Configure&#34;), &#34;&#34;);
+$crumbs[] = array(getGS(&#34;Countries&#34;), &#34;&#34;);
+echo camp_html_breadcrumbs($crumbs);
+ 
+?&gt;
+ 
+&lt;?php  if ($g_user-&gt;hasPermission(&#34;ManageCountries&#34;)) { ?&gt;
+&lt;table BORDER=&#34;0&#34; CELLSPACING=&#34;0&#34; CELLPADDING=&#34;1&#34;&gt;
+    &lt;tr&gt;
+        &lt;td&gt;&lt;a href=&#34;add.php&#34;&gt;&lt;?php putGS(&#34;Add new&#34;); ?&gt;&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+Test for Javascript
+import isTypedArray from &#39;lodash/isTypedArray&#39;;
+import reverse from &#39;lodash/reverse&#39;;
+import sortBy from &#39;lodash/sortBy&#39;;
+import take from &#39;lodash/take&#39;;
+import { food101Classes } from &#39;./food101&#39;;
+export function food101topK(classProbabilities, k = 5) {
+  const probs = isTypedArray(classProbabilities)
+    ? Array.prototype.slice.call(classProbabilities)
+    : classProbabilities;
+  const sorted = reverse(
+    sortBy(
+      probs.map((prob, index) =&gt; [ prob, index ]),
+      probIndex =&gt; probIndex[0]
+    )
+  );
+  const topK = take(sorted, k).map(probIndex =&gt; {
+    const iClass = food101Classes[probIndex[1]];
+    return {
+      id: probIndex[1],
+      name: iClass.replace(/_/, &#39; &#39;),
+      probability: probIndex[0]
+    };
+  });
+  return topK;
+};
+Test for HTML
+&lt;!DOCTYPE html PUBLIC &#34;-//W3C//DTD HTML 4.01 Transitional//EN&#34;&gt;
+&lt;html&gt;&lt;head&gt;
+&lt;title&gt;A Tiny Page&lt;/title&gt;
+&lt;style type=&#34;text/css&#34;&gt;
+&lt;!--
+      p { font-size:15pt; color:#000 }
+    --&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;!-- real comment --&gt;
+&lt;body bgcolor=&#34;#FFFFFF&#34; text=&#34;#000000&#34; link=&#34;#0000CC&#34;&gt;
+&lt;script language=&#34;javascript&#34; type=&#34;text/javascript&#34;&gt;
+      function changeHeight(h) {
+        var tds = document.getElementsByTagName(&#34;td&#34;);
+        for(var i = 0; i &lt; tds.length; i&#43;&#43;) {
+          tds[i].setAttribute(&#34;height&#34;, h &#43; &#34;px&#34;);
+      }}
+&lt;/script&gt;
+&lt;h1&gt;abc&lt;/h1&gt;
+&lt;h2&gt;def&lt;/h2&gt;
+&lt;p&gt;Testing page&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;
+Test for CSS
+/*
+Monokai style - ported by Luigi Maselli - http://grigio.org
+*/
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #272822; color: #ddd;
+}
+.hljs-tag,
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-strong,
+.hljs-name {
+  color: #f92672;
+}
+.hljs-code {
+  color: #66d9ef;
+}
+.hljs-class .hljs-title {
+  color: white;
+}
 ">  
 
   <title>
