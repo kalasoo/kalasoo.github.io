@@ -21,7 +21,7 @@ My name is **Yin Ming**, and my work is dedicated to discovering ways for humani
 | 2013-2014 | Computer Science, The University of Cambridge | [Generalized Cut Set](https://www.dropbox.com/scl/fi/zw5njee911ib1qlsfy6bk/MPhil_Presentation_Ming.pdf) |
 | 2015-2019 | Founder and CEO, Xitu Inc.| [掘金](https://juejin.cn) |
 | 2019-2024 | Product Lead, ByteDance Ltd. | [百科](https://baike.com), [TikTok](https://tiktok.com), [CapCut](https://capcut.com) |
-| 2025- | Founder and Maker, See U | [SeeU](https://seeu.lifestyle) |
+| 2025- | One-person whatever... | [SeeU](https://seeu.lifestyle), [VibeCafé](https://vibecafe.ai) |
 
 ### Contact
 
