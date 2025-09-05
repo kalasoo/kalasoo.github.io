@@ -1,55 +1,9 @@
-# Hugo default output directory
-/public/
-/resources/_gen/
-/assets/jsconfig.json
-/hugo_stats.json
-
-# Hugo cache directory
-/.hugo_build.lock
-
-# Temporary files
-*.log
-*.bak
-*.tmp
-
-# Apple specific files
-.DS_Store
-.AppleDouble
-.LSOverride
-Icon
-._*
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-
-# Windows specific files
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# Generated files by hugo
-/content/posts/rich-content.md
-/content/posts/math-typesetting.md
-/content/posts/emoji-support.md
-/content/posts/markdown-syntax.md
-/content/posts/placeholder-text.md
-
-# Local Netlify folder
-.netlify
-
-# Node modules (if using npm/yarn for themes or other dependencies)
 node_modules/
-
-# IDE specific files
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# Environment variables
+dist/
+.DS_Store
+*.log
 .env
-.env.* 
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
