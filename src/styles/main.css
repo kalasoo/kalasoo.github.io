@@ -27,7 +27,7 @@ body {
   }
   
   blockquote {
-    border-left-color: #444;
+    background-color: #2a2a2a;
   }
   
   code {
@@ -35,7 +35,7 @@ body {
   }
   
   pre {
-    background: #2a2a2a;
+    background: #1a1a1a;
   }
   
   .nav-post::before {
@@ -163,8 +163,8 @@ article {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-article i, article blockquote {
-  font-family: -apple-system, serif;
+article blockquote {
+  background-color: #f5f5f5;
 }
 
 article hr, article code, article .post-meta {
@@ -220,10 +220,13 @@ li {
 /* Blockquotes */
 blockquote {
   margin: 1em 0;
-  padding-left: 1em;
-  border-left: 3px solid #ddd;
-  font-style: italic;
+  padding: 1em;
+  border-radius: 5px;
   color: #666;
+}
+
+blockquote > p:last-child {
+  margin-bottom: 0;
 }
 
 /* Code */
@@ -303,6 +306,51 @@ th {
   margin-bottom: 1rem;
 }
 
+/* Home intro with icon */
+.home-intro {
+  margin-bottom: 3rem;
+}
+
+.intro-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.intro-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.icon-placeholder {
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.intro-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.intro-text p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: #666;
+}
+
+.intro-text blockquote {
+  margin-bottom: 1.5rem;
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   body {
@@ -324,5 +372,20 @@ th {
   
   .recent-posts time {
     margin-top: 0.25rem;
+  }
+  
+  .intro-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .profile-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .icon-placeholder {
+    font-size: 3rem;
   }
 }

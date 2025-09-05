@@ -106,14 +106,24 @@ function renderHomePage() {
   `
 
   contentDiv.innerHTML = `
-    <article>
-      <blockquote>
-        We can only see a short distance ahead, but we can see plenty there that needs to be done. - Alan Turing
-      </blockquote>
-      
-      <p>我叫<strong>阴明</strong>，我的工作致力于寻找人类与科技健康共存的方法，存续人类文明。</p>
-      
-      <p>My name is <strong>Yin Ming</strong>, and my work is dedicated to discovering ways for humanity and technology to coexist in harmony, thereby preserving human civilization.</p>
+    <article class="home-intro">
+      <div class="intro-content">
+        <div class="intro-icon">
+          <img src="/public/icon.png" alt="Yin Ming" class="profile-icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <div class="icon-placeholder" style="display: none;">👨‍💻</div>
+        </div>
+        <div class="intro-text">
+          <blockquote>
+            We can only see a short distance ahead, but we can see plenty there that needs to be done. - Alan Turing
+          </blockquote>
+          
+          <p>我叫<strong>阴明</strong>，我的工作致力于寻找人类与科技健康共存的方法，存续人类文明。
+          <br/>
+          My name is <strong>Yin Ming</strong>, and my work is dedicated to discovering ways for humanity and technology to coexist in harmony, thereby preserving human civilization.</p>
+
+          <p>You can find me on <a href="https://t.me/kalasoo">Telegram</a>, <a href="https://x.com/kalasoo">X</a>, <a href="https://github.com/kalasoo">GitHub</a> or learn more <a href="/about">about me</a></p>
+        </div>
+      </div>
     </article>
   `
 }
