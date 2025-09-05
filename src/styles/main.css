@@ -306,6 +306,79 @@ th {
   margin-bottom: 1rem;
 }
 
+/* Posts page */
+.posts h1 {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #333;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.post-item {
+  padding: 1rem 0;
+  border-bottom: 3px solid #eee;
+}
+
+.post-item:last-child {
+  border-bottom: none;
+}
+
+.post-item a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.5rem 0;
+}
+
+.post-item h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+  flex: 1;
+}
+
+.post-item time {
+  color: #666;
+  font-size: 0.9rem;
+  margin-left: 1rem;
+  flex-shrink: 0;
+}
+
+.post-item:hover h2 {
+  color: #0066cc;
+}
+
+/* Dark mode for posts */
+@media (prefers-color-scheme: dark) {
+  .posts h1 {
+    color: #e0e0e0;
+  }
+  
+  .post-item {
+    border-bottom-color: #444;
+  }
+  
+  .post-item h2 {
+    color: #e0e0e0;
+  }
+  
+  .post-item:hover h2 {
+    color: #4a9eff;
+  }
+  
+  .post-item time {
+    color: #aaa;
+  }
+}
+
 /* Home intro with icon */
 .home-intro {
   margin-bottom: 3rem;
@@ -387,5 +460,16 @@ th {
   
   .icon-placeholder {
     font-size: 3rem;
+  }
+  
+  .post-item a {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .post-item time {
+    margin-left: 0;
+    font-size: 0.85rem;
   }
 }
