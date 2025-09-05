@@ -104,6 +104,21 @@ function renderHomePage() {
         </div>
       </div>
     </article>
+    
+    <section class="recent-posts-section">
+      <h2>Recent Posts</h2>
+      <ul class="post-list">
+        ${posts.map(({ route, frontmatter }) => `
+          <li class="post-item">
+            <a href="${route}">
+              <h2>${frontmatter.title}</h2>
+              <time>${new Date(frontmatter.date).toLocaleDateString('zh-CN')}</time>
+            </a>
+          </li>
+        `).join('')}
+      </ul>
+      <p><a href="/posts">See all posts →</a></p>
+    </section>
   `
 }
 
