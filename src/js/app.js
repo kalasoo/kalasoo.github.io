@@ -57,14 +57,6 @@ function renderContent(route) {
 function handleRoute() {
   const path = window.location.pathname
   
-  // Show/hide navigation based on page type
-  const nav = document.querySelector('nav')
-  if (path === '/' || path === '/posts') {
-    nav.style.display = 'block'
-  } else {
-    nav.style.display = 'none'
-  }
-  
   if (path === '/') {
     renderHomePage()
   } else if (path === '/posts') {
@@ -92,19 +84,6 @@ function renderHomePage() {
     .sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date))
     .slice(0, 10)
 
-  // Update navigation with recent posts
-  const nav = document.querySelector('nav ul')
-  const recentPostsHTML = posts.map(({ route, frontmatter }) => 
-    `<li class="nav-post"><a href="${route}">${frontmatter.title}</a></li>`
-  ).join('')
-  
-  nav.innerHTML = `
-    <li><a href="/about">about</a></li>
-    <li><a href="/posts">all posts</a></li>
-    ${recentPostsHTML}
-    <li class="nav-see-all"><a href="/posts">See all →</a></li>
-  `
-
   contentDiv.innerHTML = `
     <article class="home-intro">
       <div class="intro-content">
@@ -131,13 +110,6 @@ function renderHomePage() {
 // Posts page
 function renderPostsPage() {
   const contentDiv = document.getElementById('content')
-  
-  // Reset navigation to default state
-  const nav = document.querySelector('nav ul')
-  nav.innerHTML = `
-    <li><a href="/about">about</a></li>
-    <li><a href="/posts">all posts</a></li>
-  `
   
   const posts = Object.entries(content)
     .filter(([route]) => route.startsWith('/posts/'))

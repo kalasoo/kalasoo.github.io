@@ -38,20 +38,16 @@ body {
     background: #1a1a1a;
   }
   
-  .nav-post::before {
-    color: #555;
+  header {
+    border-bottom-color: #444;
   }
   
-  .nav-post a {
-    color: #aaa;
+  nav a {
+    color: #e0e0e0;
   }
   
-  .nav-see-all {
-    border-top-color: #444;
-  }
-  
-  .nav-see-all a {
-    color: #888;
+  nav a:hover {
+    color: #4a9eff;
   }
 }
 
@@ -62,10 +58,18 @@ body {
 }
 
 /* Header */
-header h1 {
-  font-size: 1.5rem;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 2rem;
-  font-weight: 400;
+  padding-bottom: 1rem;
+}
+
+header h1 {
+  font-size: 0.95rem;
+  margin: 0;
+  font-weight: 500;
 }
 
 header h1 a {
@@ -76,69 +80,31 @@ header h1 a {
 /* Navigation */
 nav ul {
   list-style: none;
-  margin-bottom: 3rem;
-  padding-left: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
 }
 
-nav > ul > li {
-  margin-bottom: 0.5rem;
-}
-
-nav ul ul {
-  margin-left: 1rem;
-  margin-top: 0.25rem;
-  margin-bottom: 0;
+nav li {
+  margin: 0;
 }
 
 nav a {
   color: #666;
   text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease;
 }
 
 nav a:hover {
-  text-decoration: underline;
-}
-
-/* Navigation post items */
-.nav-post {
-  margin-left: 1.5rem;
-  margin-bottom: 0.25rem;
-  position: relative;
-}
-
-.nav-post::before {
-  content: "•";
-  color: #ccc;
-  position: absolute;
-  left: -0.75rem;
-}
-
-.nav-post a {
-  font-size: 0.9rem;
-  color: #888;
-  line-height: 1.4;
-}
-
-.nav-post a:hover {
   color: #0066cc;
+  text-decoration: none;
 }
 
-.nav-see-all {
-  margin-top: 0.75rem;
-  margin-left: 1.5rem;
-  border-top: 1px solid #eee;
-  padding-top: 0.5rem;
-}
-
-.nav-see-all a {
-  font-size: 0.85rem;
-  color: #999;
-  font-weight: 500;
-}
-
-.nav-see-all a:hover {
-  color: #0066cc;
-}
 
 /* Links */
 a {
@@ -422,12 +388,13 @@ th {
 
 .intro-text blockquote {
   margin-bottom: 1.5rem;
+  margin-top: 0;
 }
 
 /* Responsive */
 @media (max-width: 600px) {
   body {
-    padding: 1rem 0.5rem;
+    padding: 1rem;
   }
   
   h1 {
@@ -471,5 +438,14 @@ th {
   .post-item time {
     margin-left: 0;
     font-size: 0.85rem;
+  }
+  
+  header {
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  nav ul {
+    gap: 1.5rem;
   }
 }
