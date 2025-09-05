@@ -23,7 +23,7 @@ export function generateRSS(posts) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Ming Yin｜阴明｜@kalasoo</title>
+    <title>@kalasoo</title>
     <description>Personal blog exploring the intersection of technology and humanity</description>
     <link>${siteUrl}</link>
     <language>zh-cn</language>

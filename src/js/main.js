@@ -1,6 +1,7 @@
 import MarkdownIt from 'markdown-it'
 import matter from 'gray-matter'
 import { fallbackContent } from './fallback.js'
+import { siteConfig } from './config.js'
 
 // Initialize markdown parser
 const md = new MarkdownIt({
@@ -149,14 +150,14 @@ class ContentLoader {
     
     const html = `
       <div class="home">
-        <p>Welcome to my personal blog. Here are my latest thoughts on technology, humanity, and the future.</p>
+        ${siteConfig.theme.showDescription ? `<p>${siteConfig.description}</p>` : ''}
         <section class="recent-posts">
           <h2>Recent Posts</h2>
           <ul>
             ${posts.map(post => `
               <li>
                 <a href="${post.route}">${post.frontmatter.title}</a>
-                <time>${new Date(post.frontmatter.date).toLocaleDateString('zh-CN')}</time>
+                <time>${new Date(post.frontmatter.date).toLocaleDateString(siteConfig.languageCode)}</time>
               </li>
             `).join('')}
           </ul>
