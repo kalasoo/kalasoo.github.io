@@ -174,11 +174,13 @@ document.addEventListener('click', (e) => {
 // Initial load
 // Check if we came from a 404 redirect
 const redirectPath = sessionStorage.getItem('redirect')
-if (redirectPath) {
+if (redirectPath && redirectPath !== window.location.pathname) {
   sessionStorage.removeItem('redirect')
   window.history.replaceState({}, '', redirectPath)
+  handleRoute()
+} else {
+  handleRoute()
 }
-handleRoute()
 
 // HMR support - this will automatically reload when content changes!
 if (import.meta.hot) {
