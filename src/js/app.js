@@ -45,7 +45,6 @@ function renderContent(route) {
       <header>
         <h1>${frontmatter.title || 'Untitled'}</h1>
         ${frontmatter.date ? `<time>${new Date(frontmatter.date).toLocaleDateString('zh-CN')}</time>` : ''}
-        <small style="color: #666; font-size: 0.8em;">Loaded at: ${new Date().toLocaleTimeString()}</small>
       </header>
       <div class="content">
         ${html}
@@ -57,6 +56,14 @@ function renderContent(route) {
 // Simple router
 function handleRoute() {
   const path = window.location.pathname
+  
+  // Show/hide navigation based on page type
+  const nav = document.querySelector('nav')
+  if (path === '/' || path === '/posts') {
+    nav.style.display = 'block'
+  } else {
+    nav.style.display = 'none'
+  }
   
   if (path === '/') {
     renderHomePage()
@@ -83,29 +90,45 @@ function renderHomePage() {
       return { route, frontmatter }
     })
     .sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date))
-    .slice(0, 5)
+    .slice(0, 10)
+
+  // Update navigation with recent posts
+  const nav = document.querySelector('nav ul')
+  const recentPostsHTML = posts.map(({ route, frontmatter }) => 
+    `<li class="nav-post"><a href="${route}">${frontmatter.title}</a></li>`
+  ).join('')
+  
+  nav.innerHTML = `
+    <li><a href="/about">about</a></li>
+    <li><a href="/posts">all posts</a></li>
+    ${recentPostsHTML}
+    <li class="nav-see-all"><a href="/posts">See all →</a></li>
+  `
 
   contentDiv.innerHTML = `
-    <div class="home">
-      <section class="recent-posts">
-        <h2>Recent Posts</h2>
-        <ul>
-          ${posts.map(({ route, frontmatter }) => `
-            <li>
-              <a href="${route}">${frontmatter.title}</a>
-              <time>${new Date(frontmatter.date).toLocaleDateString('zh-CN')}</time>
-            </li>
-          `).join('')}
-        </ul>
-        <p><a href="/posts">See all posts...</a></p>
-      </section>
-    </div>
+    <article>
+      <blockquote>
+        We can only see a short distance ahead, but we can see plenty there that needs to be done. - Alan Turing
+      </blockquote>
+      
+      <p>我叫<strong>阴明</strong>，我的工作致力于寻找人类与科技健康共存的方法，存续人类文明。</p>
+      
+      <p>My name is <strong>Yin Ming</strong>, and my work is dedicated to discovering ways for humanity and technology to coexist in harmony, thereby preserving human civilization.</p>
+    </article>
   `
 }
 
 // Posts page
 function renderPostsPage() {
   const contentDiv = document.getElementById('content')
+  
+  // Reset navigation to default state
+  const nav = document.querySelector('nav ul')
+  nav.innerHTML = `
+    <li><a href="/about">about</a></li>
+    <li><a href="/posts">all posts</a></li>
+  `
+  
   const posts = Object.entries(content)
     .filter(([route]) => route.startsWith('/posts/'))
     .map(([route, markdownContent]) => {

@@ -41,6 +41,22 @@ body {
   pre {
     background: #2a2a2a;
   }
+  
+  .nav-post::before {
+    color: #555;
+  }
+  
+  .nav-post a {
+    color: #aaa;
+  }
+  
+  .nav-see-all {
+    border-top-color: #444;
+  }
+  
+  .nav-see-all a {
+    color: #888;
+  }
 }
 
 /* Container */
@@ -65,6 +81,7 @@ header h1 a {
 nav ul {
   list-style: none;
   margin-bottom: 3rem;
+  padding-left: 0;
 }
 
 nav > ul > li {
@@ -84,6 +101,47 @@ nav a {
 
 nav a:hover {
   text-decoration: underline;
+}
+
+/* Navigation post items */
+.nav-post {
+  margin-left: 1.5rem;
+  margin-bottom: 0.25rem;
+  position: relative;
+}
+
+.nav-post::before {
+  content: "•";
+  color: #ccc;
+  position: absolute;
+  left: -0.75rem;
+}
+
+.nav-post a {
+  font-size: 0.9rem;
+  color: #888;
+  line-height: 1.4;
+}
+
+.nav-post a:hover {
+  color: #0066cc;
+}
+
+.nav-see-all {
+  margin-top: 0.75rem;
+  margin-left: 1.5rem;
+  border-top: 1px solid #eee;
+  padding-top: 0.5rem;
+}
+
+.nav-see-all a {
+  font-size: 0.85rem;
+  color: #999;
+  font-weight: 500;
+}
+
+.nav-see-all a:hover {
+  color: #0066cc;
 }
 
 /* Links */
@@ -119,6 +177,12 @@ article i, article blockquote {
 
 article hr, article code, article .post-meta {
   font-family: monospace;
+}
+
+article hr {
+  border: none;
+  border-top: 3px dotted #ddd;
+  margin: 2em 0;
 }
 
 article h1, article h2, article h3, article h4, article h5, article h6 {
@@ -217,7 +281,7 @@ th {
 
 .post header {
   margin-bottom: 2rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 3px solid #eee;
   padding-bottom: 1rem;
 }
 
@@ -234,74 +298,6 @@ th {
 .post .content {
   font-size: 1rem;
   line-height: 1.7;
-}
-
-/* Home page */
-.home {
-  margin-bottom: 3rem;
-}
-
-.home p {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-  color: #666;
-}
-
-.recent-posts h2 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-}
-
-.recent-posts ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.recent-posts li {
-  margin-bottom: 0.75rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.recent-posts time {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-/* Posts page */
-.posts h1 {
-  margin-bottom: 2rem;
-}
-
-.post-list {
-  list-style: none;
-  padding-left: 0;
-}
-
-.post-item {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #eee;
-}
-
-.post-item:last-child {
-  border-bottom: none;
-}
-
-.post-item a {
-  display: block;
-  text-decoration: none;
-}
-
-.post-item h2 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.25rem;
-}
-
-.post-item time {
-  color: #666;
-  font-size: 0.9rem;
 }
 
 /* Error page */
