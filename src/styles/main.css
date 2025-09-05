@@ -26,10 +26,6 @@ body {
     color: #4a9eff;
   }
   
-  a:visited {
-    color: #b19cd9;
-  }
-  
   blockquote {
     border-left-color: #444;
   }
@@ -152,10 +148,6 @@ a {
 
 a:hover {
   text-decoration: underline;
-}
-
-a:visited {
-  color: #551a8b;
 }
 
 /* Typography */
