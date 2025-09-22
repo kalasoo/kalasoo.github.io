@@ -42,10 +42,10 @@ function renderContent(route) {
   // Render the page
   contentDiv.innerHTML = `
     <article class="post">
-      <header>
+      <div class="post-header">
         <h1>${frontmatter.title || 'Untitled'}</h1>
         ${frontmatter.date ? `<time>${new Date(frontmatter.date).toLocaleDateString('zh-CN')}</time>` : ''}
-      </header>
+      </div>
       <div class="content">
         ${html}
       </div>
