@@ -12,7 +12,7 @@ title = "About"
 | 2013-2014 | Computer Science, The University of Cambridge | [Generalized Cut Set](https://www.dropbox.com/scl/fi/zw5njee911ib1qlsfy6bk/MPhil_Presentation_Ming.pdf) |
 | 2015-2019 | Founder and CEO, Xitu Inc.| [掘金](https://juejin.cn) |
 | 2019-2024 | Product Lead, ByteDance Ltd. | [百科](https://baike.com), [TikTok](https://tiktok.com), [CapCut](https://capcut.com) |
-| 2025- | One-person whatever... | SeeAnd, [VibeCafé](https://vibecafe.ai) |
+| 2025- | One-person whatever... | [VibeCafé](https://vibecafe.ai) |
 
 ### Contact
 
@@ -20,7 +20,7 @@ WeChat: kalasoo, [Telegram](https://t.me/kalasoo), [Email](mailto:ym.kalasoo@gma
 
 ### Addiction
 
-[Civilization](https://civilization.2k.com), [Kingdom Rush](https://www.kingdomrush.com), [Lady Gaga](https://www.ladygaga.com), [One Piece](https://one-piece.com), [HUNTER×HUNTER](https://www.shonenjump.com/j/rensai/hunter.html)
+[Civilization](https://civilization.2k.com), [Kingdom Rush](https://www.kingdomrush.com), [Lady Gaga](https://www.ladygaga.com), [One Piece](https://one-piece.com), [HUNTER×HUNTER](https://www.shonenjump.com/j/rensai/hunter.html), [罗小黑战记](https://www.bilibili.com/bangumi/play/ss1733)
 
 ### Investment
 

@@ -88,7 +88,7 @@ function renderHomePage() {
     <article class="home-intro">
       <div class="intro-content">
         <div class="intro-icon">
-          <img src="/public/icon.png" alt="Yin Ming" class="profile-icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <img src="/icon.png" alt="Yin Ming" class="profile-icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
           <div class="icon-placeholder" style="display: none;">👨‍💻</div>
         </div>
         <div class="intro-text">
