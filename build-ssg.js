@@ -43,7 +43,9 @@ const getTemplate = (content, title = siteConfig.title, assetPaths) => `<!DOCTYP
     </header>
 
     <main>
-      ${content}
+      <div id="content">
+        ${content}
+      </div>
     </main>
   </div>
 

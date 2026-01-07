@@ -22,15 +22,12 @@ function renderContent(route) {
   const contentDiv = document.getElementById('content')
   if (!contentDiv) return
 
-  if (contentDiv.innerHTML.trim() !== '') return
-
   const markdownContent = content[route]
   if (!markdownContent) {
     contentDiv.innerHTML = '<h1>404 - Page Not Found</h1>'
     return
   }
 
-  // Parse frontmatter and markdown
   const { data: frontmatter, content: markdown } = matter(markdownContent, {
     engines: {
       toml: toml
@@ -40,7 +37,6 @@ function renderContent(route) {
   })
   const html = md.render(markdown)
 
-  // Render the page
   contentDiv.innerHTML = `
     <article class="post">
       <div class="post-header">
@@ -71,8 +67,7 @@ function renderHomePage() {
   const contentDiv = document.getElementById('content')
   if (!contentDiv) return
 
-  if (contentDiv.innerHTML.trim() !== '') return
-
+  contentDiv.innerHTML = ''
   const posts = Object.entries(content)
     .filter(([route]) => route.startsWith('/posts/'))
     .map(([route, markdownContent]) => {
@@ -130,8 +125,7 @@ function renderPostsPage() {
   const contentDiv = document.getElementById('content')
   if (!contentDiv) return
 
-  if (contentDiv.innerHTML.trim() !== '') return
-
+  contentDiv.innerHTML = ''
   const posts = Object.entries(content)
     .filter(([route]) => route.startsWith('/posts/'))
     .map(([route, markdownContent]) => {
