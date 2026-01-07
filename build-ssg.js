@@ -20,7 +20,7 @@ const siteConfig = {
   languageCode: 'zh-cn',
 }
 
-const getTemplate = (content, title = siteConfig.title) => `<!DOCTYPE html>
+const getTemplate = (content, title = siteConfig.title, assetPaths) => `<!DOCTYPE html>
 <html lang="${siteConfig.languageCode}">
 <head>
   <meta charset="UTF-8">
@@ -28,7 +28,7 @@ const getTemplate = (content, title = siteConfig.title) => `<!DOCTYPE html>
   <title>${title}</title>
   <meta name="description" content="${siteConfig.description}">
   <link rel="shortcut icon" type="image/png" href="/favicon.png">
-  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="stylesheet" href="${assetPaths.cssPath}">
 </head>
 <body>
   <div class="container">
@@ -47,7 +47,7 @@ const getTemplate = (content, title = siteConfig.title) => `<!DOCTYPE html>
     </main>
   </div>
 
-  <script type="module" src="/assets/app.js"></script>
+  <script type="module" src="${assetPaths.jsPath}"></script>
 </body>
 </html>`
 
@@ -166,6 +166,19 @@ function readMarkdownFiles(dir) {
   return files
 }
 
+function getAssetPaths() {
+  const viteIndexPath = path.join(process.cwd(), 'dist/index.html')
+  const viteHtml = fs.readFileSync(viteIndexPath, 'utf-8')
+
+  const cssMatch = viteHtml.match(/href="\/assets\/([^"]+\.css)"/)
+  const jsMatch = viteHtml.match(/src="\/assets\/([^"]+\.js)"/)
+
+  return {
+    cssPath: cssMatch ? `/assets/${cssMatch[1]}` : '/assets/main.css',
+    jsPath: jsMatch ? `/assets/${jsMatch[1]}` : '/assets/app.js'
+  }
+}
+
 async function buildStatic() {
   console.log('🚀 Starting static site generation...')
 
@@ -182,6 +195,9 @@ async function buildStatic() {
     console.log('📋 Copied CNAME file')
   }
 
+  const assetPaths = getAssetPaths()
+  console.log(`📦 Found assets: ${assetPaths.cssPath}, ${assetPaths.jsPath}`)
+
   const posts = readMarkdownFiles(path.join(__dirname, 'src/content/posts'))
   const pages = readMarkdownFiles(path.join(__dirname, 'src/content/pages'))
 
@@ -193,7 +209,7 @@ async function buildStatic() {
   for (const page of pages) {
     const route = `/${page.filename}`
     const content = renderContent(page.frontmatter, page.html, false)
-    const html = getTemplate(content, page.frontmatter.title)
+    const html = getTemplate(content, page.frontmatter.title, assetPaths)
     const outputPath = path.join(distDir, `${page.filename}.html`)
 
     fs.writeFileSync(outputPath, html, 'utf-8')
@@ -206,7 +222,7 @@ async function buildStatic() {
     post.route = route
 
     const content = renderContent(post.frontmatter, post.html, true)
-    const html = getTemplate(content, post.frontmatter.title)
+    const html = getTemplate(content, post.frontmatter.title, assetPaths)
     const outputPath = path.join(postsDir, `${post.filename}.html`)
 
     fs.writeFileSync(outputPath, html, 'utf-8')
@@ -215,14 +231,14 @@ async function buildStatic() {
 
   console.log('🏠 Building home page...')
   const homeContent = renderHomePage(posts)
-  const homeHtml = getTemplate(homeContent)
+  const homeHtml = getTemplate(homeContent, siteConfig.title, assetPaths)
   const homePath = path.join(distDir, 'index.html')
   fs.writeFileSync(homePath, homeHtml, 'utf-8')
   console.log(`   → ${homePath}`)
 
   console.log('📋 Building posts index page...')
   const postsContent = renderPostsPage(posts)
-  const postsHtml = getTemplate(postsContent, 'All Posts')
+  const postsHtml = getTemplate(postsContent, 'All Posts', assetPaths)
   const postsIndexPath = path.join(postsDir, 'index.html')
   fs.writeFileSync(postsIndexPath, postsHtml, 'utf-8')
   console.log(`   → ${postsIndexPath}`)
