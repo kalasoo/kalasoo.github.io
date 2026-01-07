@@ -1,17 +1,14 @@
-// Simple content imports - let Vite handle HMR automatically
-import aboutContent from './pages/about.md?raw'
-import testContent from './pages/test.md?raw'
-import post1Content from './posts/3-poisons.md?raw'
-import post2Content from './posts/engine-head-platform.md?raw'
-import post3Content from './posts/one-person-unicorn.md?raw'
-import post4Content from './posts/reflections-on-vibe-coding-2025.md?raw'
+const pageModules = import.meta.glob('./pages/*.md', { query: '?raw', import: 'default', eager: true })
+const postModules = import.meta.glob('./posts/*.md', { query: '?raw', import: 'default', eager: true })
 
-// Export all content in a simple object
-export const content = {
-  '/about': aboutContent,
-  '/test': testContent,
-  '/posts/3-poisons': post1Content,
-  '/posts/engine-head-platform': post2Content,
-  '/posts/one-person-unicorn': post3Content,
-  '/posts/reflections-on-vibe-coding-2025': post4Content
+export const content = {}
+
+for (const path in pageModules) {
+  const moduleName = path.replace('./pages/', '').replace('.md', '')
+  content[`/${moduleName}`] = pageModules[path]
+}
+
+for (const path in postModules) {
+  const moduleName = path.replace('./posts/', '').replace('.md', '')
+  content[`/posts/${moduleName}`] = postModules[path]
 }
