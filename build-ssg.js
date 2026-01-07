@@ -13,6 +13,55 @@ const md = new MarkdownIt({
   typographer: true
 })
 
+function extractDescription(html, maxLength = 160) {
+  const text = html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
+  if (text.length <= maxLength) return text
+  return text.substring(0, maxLength - 3) + '...'
+}
+
+function generateSitemap(posts, pages) {
+  const urls = [
+    { loc: siteConfig.baseURL, priority: '1.0', changefreq: 'weekly' },
+    { loc: `${siteConfig.baseURL}/posts`, priority: '0.8', changefreq: 'weekly' }
+  ]
+
+  for (const page of pages) {
+    urls.push({
+      loc: `${siteConfig.baseURL}/${page.filename}`,
+      priority: '0.7',
+      changefreq: 'monthly'
+    })
+  }
+
+  for (const post of posts) {
+    urls.push({
+      loc: `${siteConfig.baseURL}/posts/${post.filename}`,
+      lastmod: post.frontmatter.date ? new Date(post.frontmatter.date).toISOString().split('T')[0] : null,
+      priority: '0.6',
+      changefreq: 'monthly'
+    })
+  }
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map(u => `  <url>
+    <loc>${u.loc}</loc>
+    ${u.lastmod ? `<lastmod>${u.lastmod}</lastmod>` : ''}
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`
+
+  return sitemap
+}
+
+function generateRobotsTxt() {
+  return `User-agent: *
+Allow: /
+
+Sitemap: ${siteConfig.baseURL}/sitemap.xml`
+}
+
 const siteConfig = {
   title: '@kalasoo',
   description: 'kalasoo\'s blog',
@@ -20,13 +69,95 @@ const siteConfig = {
   languageCode: 'zh-cn',
 }
 
-const getTemplate = (content, title = siteConfig.title, assetPaths) => `<!DOCTYPE html>
+const getTemplate = (content, title = siteConfig.title, assetPaths, meta = {}) => {
+  const pageTitle = title === siteConfig.title ? title : `${title} | ${siteConfig.title}`
+  const description = meta.description || siteConfig.description
+  const url = meta.url || siteConfig.baseURL
+  const type = meta.type || 'website'
+  const image = meta.image || `${siteConfig.baseURL}/icon.png`
+  const datePublished = meta.date ? new Date(meta.date).toISOString() : null
+  const dateModified = meta.modified ? new Date(meta.modified).toISOString() : datePublished
+
+  // JSON-LD structured data
+  let jsonLd = ''
+  if (meta.type === 'article') {
+    jsonLd = `
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "${title}",
+      "description": "${description}",
+      "url": "${url}",
+      "image": "${image}",
+      "datePublished": "${datePublished}",
+      "dateModified": "${dateModified || datePublished}",
+      "author": {
+        "@type": "Person",
+        "name": "Yin Ming",
+        "url": "${siteConfig.baseURL}/about"
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Yin Ming"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "${url}"
+      }
+    }
+    </script>`
+  } else {
+    jsonLd = `
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "${siteConfig.title}",
+      "description": "${siteConfig.description}",
+      "url": "${siteConfig.baseURL}",
+      "author": {
+        "@type": "Person",
+        "name": "Yin Ming",
+        "url": "${siteConfig.baseURL}/about"
+      }
+    }
+    </script>`
+  }
+
+  return `<!DOCTYPE html>
 <html lang="${siteConfig.languageCode}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title}</title>
-  <meta name="description" content="${siteConfig.description}">
+  <title>${pageTitle}</title>
+  <meta name="description" content="${description}">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="${url}">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${description}">
+  <meta property="og:type" content="${type}">
+  <meta property="og:url" content="${url}">
+  <meta property="og:image" content="${image}">
+  <meta property="og:site_name" content="${siteConfig.title}">
+  <meta property="og:locale" content="zh_CN">
+  ${datePublished ? `<meta property="article:published_time" content="${datePublished}">` : ''}
+  ${dateModified ? `<meta property="article:modified_time" content="${dateModified}">` : ''}
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:image" content="${image}">
+  <meta name="twitter:site" content="@kalasoo">
+  <meta name="twitter:creator" content="@kalasoo">
+  
+  <!-- JSON-LD Structured Data -->
+  ${jsonLd}
+  
   <link rel="shortcut icon" type="image/png" href="/favicon.png">
   <link rel="stylesheet" href="${assetPaths.cssPath}">
 </head>
@@ -52,6 +183,7 @@ const getTemplate = (content, title = siteConfig.title, assetPaths) => `<!DOCTYP
   <script type="module" src="${assetPaths.jsPath}"></script>
 </body>
 </html>`
+}
 
 function renderContent(frontmatter, html, isPost = false) {
   if (!isPost) {
@@ -211,7 +343,12 @@ async function buildStatic() {
   for (const page of pages) {
     const route = `/${page.filename}`
     const content = renderContent(page.frontmatter, page.html, false)
-    const html = getTemplate(content, page.frontmatter.title, assetPaths)
+    const meta = {
+      description: page.frontmatter.description || extractDescription(page.html),
+      url: `${siteConfig.baseURL}/${page.filename}`,
+      type: 'website'
+    }
+    const html = getTemplate(content, page.frontmatter.title, assetPaths, meta)
     const outputPath = path.join(distDir, `${page.filename}.html`)
 
     fs.writeFileSync(outputPath, html, 'utf-8')
@@ -224,7 +361,14 @@ async function buildStatic() {
     post.route = route
 
     const content = renderContent(post.frontmatter, post.html, true)
-    const html = getTemplate(content, post.frontmatter.title, assetPaths)
+    const meta = {
+      description: post.frontmatter.description || extractDescription(post.html),
+      url: `${siteConfig.baseURL}/posts/${post.filename}`,
+      type: 'article',
+      date: post.frontmatter.date,
+      modified: post.frontmatter.modified
+    }
+    const html = getTemplate(content, post.frontmatter.title, assetPaths, meta)
     const outputPath = path.join(postsDir, `${post.filename}.html`)
 
     fs.writeFileSync(outputPath, html, 'utf-8')
@@ -233,22 +377,43 @@ async function buildStatic() {
 
   console.log('🏠 Building home page...')
   const homeContent = renderHomePage(posts)
-  const homeHtml = getTemplate(homeContent, siteConfig.title, assetPaths)
+  const homeMeta = {
+    description: siteConfig.description,
+    url: siteConfig.baseURL,
+    type: 'website'
+  }
+  const homeHtml = getTemplate(homeContent, siteConfig.title, assetPaths, homeMeta)
   const homePath = path.join(distDir, 'index.html')
   fs.writeFileSync(homePath, homeHtml, 'utf-8')
   console.log(`   → ${homePath}`)
 
   console.log('📋 Building posts index page...')
   const postsContent = renderPostsPage(posts)
-  const postsHtml = getTemplate(postsContent, 'All Posts', assetPaths)
+  const postsIndexMeta = {
+    description: 'All blog posts by Yin Ming',
+    url: `${siteConfig.baseURL}/posts`,
+    type: 'website'
+  }
+  const postsHtml = getTemplate(postsContent, 'All Posts', assetPaths, postsIndexMeta)
   const postsIndexPath = path.join(postsDir, 'index.html')
   fs.writeFileSync(postsIndexPath, postsHtml, 'utf-8')
   console.log(`   → ${postsIndexPath}`)
+
+  console.log('🗺️ Generating sitemap.xml...')
+  const sitemap = generateSitemap(posts, pages)
+  fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemap, 'utf-8')
+  console.log(`   → ${path.join(distDir, 'sitemap.xml')}`)
+
+  console.log('🤖 Generating robots.txt...')
+  const robotsTxt = generateRobotsTxt()
+  fs.writeFileSync(path.join(distDir, 'robots.txt'), robotsTxt, 'utf-8')
+  console.log(`   → ${path.join(distDir, 'robots.txt')}`)
 
   console.log('✅ Static site generation complete!')
   console.log(`   - Generated ${posts.length} posts`)
   console.log(`   - Generated ${pages.length} pages`)
   console.log(`   - Generated home page and posts index`)
+  console.log(`   - Generated sitemap.xml and robots.txt`)
 }
 
 buildStatic().catch(err => {
