@@ -18,10 +18,11 @@ const md = new MarkdownIt({
   typographer: true
 })
 
-// Simple content renderer
 function renderContent(route) {
   const contentDiv = document.getElementById('content')
   if (!contentDiv) return
+
+  if (contentDiv.innerHTML.trim() !== '') return
 
   const markdownContent = content[route]
   if (!markdownContent) {
@@ -66,9 +67,12 @@ function handleRoute() {
   }
 }
 
-// Home page
 function renderHomePage() {
   const contentDiv = document.getElementById('content')
+  if (!contentDiv) return
+
+  if (contentDiv.innerHTML.trim() !== '') return
+
   const posts = Object.entries(content)
     .filter(([route]) => route.startsWith('/posts/'))
     .map(([route, markdownContent]) => {
@@ -122,10 +126,12 @@ function renderHomePage() {
   `
 }
 
-// Posts page
 function renderPostsPage() {
   const contentDiv = document.getElementById('content')
-  
+  if (!contentDiv) return
+
+  if (contentDiv.innerHTML.trim() !== '') return
+
   const posts = Object.entries(content)
     .filter(([route]) => route.startsWith('/posts/'))
     .map(([route, markdownContent]) => {
