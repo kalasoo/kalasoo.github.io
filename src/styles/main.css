@@ -1,4 +1,52 @@
-/* Reset and base styles */
+/* ===== CSS Custom Properties (Theme Variables) ===== */
+:root {
+  /* Light theme (default) */
+  --color-bg: #fff;
+  --color-text: #333;
+  --color-text-secondary: #666;
+  --color-text-muted: #aaa;
+  --color-link: #0066cc;
+  --color-link-hover: #0066cc;
+  --color-border: #eee;
+  --color-border-dark: #ddd;
+  --color-code-bg: #f5f5f5;
+  --color-blockquote-bg: #f5f5f5;
+  --color-blockquote-text: #666;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --color-bg: #1a1a1a;
+  --color-text: #e0e0e0;
+  --color-text-secondary: #aaa;
+  --color-text-muted: #888;
+  --color-link: #4a9eff;
+  --color-link-hover: #4a9eff;
+  --color-border: #444;
+  --color-border-dark: #444;
+  --color-code-bg: #2a2a2a;
+  --color-blockquote-bg: #2a2a2a;
+  --color-blockquote-text: #bbb;
+}
+
+/* Auto theme: respect system preference */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #1a1a1a;
+    --color-text: #e0e0e0;
+    --color-text-secondary: #aaa;
+    --color-text-muted: #888;
+    --color-link: #4a9eff;
+    --color-link-hover: #4a9eff;
+    --color-border: #444;
+    --color-border-dark: #444;
+    --color-code-bg: #2a2a2a;
+    --color-blockquote-bg: #2a2a2a;
+    --color-blockquote-text: #bbb;
+  }
+}
+
+/* ===== Reset and Base Styles ===== */
 * {
   margin: 0;
   padding: 0;
@@ -8,65 +56,12 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
-  color: #333;
-  background: #fff;
+  color: var(--color-text);
+  background: var(--color-bg);
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem 1rem;
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #1a1a1a;
-    color: #e0e0e0;
-  }
-  
-  a {
-    color: #4a9eff;
-  }
-  
-  blockquote {
-    background-color: #2a2a2a;
-  }
-  
-  code {
-    background: #2a2a2a;
-  }
-  
-  pre {
-    background: #1a1a1a;
-  }
-  
-  header {
-    border-bottom-color: #444;
-  }
-  
-  nav a {
-    color: #e0e0e0;
-  }
-  
-  nav a:hover {
-    color: #4a9eff;
-  }
-
-  /* Tables and separators */
-  th, td {
-    border-color: #444;
-  }
-
-  th {
-    background: #2a2a2a;
-  }
-
-  article hr {
-    border-top-color: #444;
-  }
-
-  /* Improve readability of intro text */
-  .intro-text p {
-    color: #aaa;
-  }
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Container */
@@ -75,7 +70,7 @@ body {
   margin: 0 auto;
 }
 
-/* Header */
+/* ===== Header ===== */
 header {
   display: flex;
   justify-content: space-between;
@@ -95,13 +90,13 @@ header h1 a {
   color: inherit;
 }
 
-/* Navigation */
+/* ===== Navigation ===== */
 nav ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
   align-items: center;
 }
 
@@ -110,7 +105,7 @@ nav li {
 }
 
 nav a {
-  color: #666;
+  color: var(--color-text-secondary);
   text-decoration: none;
   font-weight: 500;
   font-size: 0.95rem;
@@ -119,14 +114,50 @@ nav a {
 }
 
 nav a:hover {
-  color: #0066cc;
+  color: var(--color-link);
   text-decoration: none;
 }
 
+/* ===== Theme Toggle ===== */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--color-code-bg);
+  border-radius: 20px;
+  padding: 0.25rem;
+  font-size: 0.75rem;
+}
 
-/* Links */
+.theme-toggle button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.35rem 0.5rem;
+  border-radius: 14px;
+  color: var(--color-text-secondary);
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.theme-toggle button:hover {
+  color: var(--color-text);
+}
+
+.theme-toggle button.active {
+  background: var(--color-bg);
+  color: var(--color-text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .theme-toggle button.active {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== Links ===== */
 a {
-  color: #0066cc;
+  color: var(--color-link);
   text-decoration: none;
 }
 
@@ -134,47 +165,12 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Typography */
+/* ===== Typography ===== */
 h1, h2, h3, h4, h5, h6 {
   margin-top: 2em;
   margin-bottom: 0.5em;
   font-weight: 600;
   line-height: 1.3;
-}
-
-/* Custom styling from Hugo assets */
-article {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-article blockquote {
-  background-color: #f5f5f5;
-}
-
-article hr, article code, article .post-meta {
-  font-family: monospace;
-}
-
-article hr {
-  border: none;
-  border-top: 3px dotted #ddd;
-  margin: 2em 0;
-}
-
-article h1, article h2, article h3, article h4, article h5, article h6 {
-  margin-top: 2em;
-}
-
-p, ul li, ol li {
-  line-height: 1.6em;
-}
-
-blockquote {
-  margin: 1em 0;
-}
-
-.w {
-  max-width: 800px;
 }
 
 h1 {
@@ -201,29 +197,57 @@ li {
   margin-bottom: 0.25rem;
 }
 
-/* Blockquotes */
+p, ul li, ol li {
+  line-height: 1.6em;
+}
+
+/* ===== Article Styles ===== */
+article {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+article h1, article h2, article h3, article h4, article h5, article h6 {
+  margin-top: 2em;
+}
+
+article hr, article code, article .post-meta {
+  font-family: monospace;
+}
+
+article hr {
+  border: none;
+  border-top: 3px dotted var(--color-border-dark);
+  margin: 2em 0;
+}
+
+/* ===== Blockquotes ===== */
 blockquote {
   margin: 1em 0;
   padding: 1em;
   border-radius: 5px;
-  color: #666;
+  background-color: var(--color-blockquote-bg);
+  color: var(--color-blockquote-text);
 }
 
 blockquote > p:last-child {
   margin-bottom: 0;
 }
 
-/* Code */
+article blockquote {
+  background-color: var(--color-blockquote-bg);
+}
+
+/* ===== Code ===== */
 code {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  background: #f5f5f5;
+  background: var(--color-code-bg);
   padding: 0.2em 0.4em;
   border-radius: 3px;
   font-size: 0.9em;
 }
 
 pre {
-  background: #f5f5f5;
+  background: var(--color-code-bg);
   padding: 1rem;
   border-radius: 5px;
   overflow-x: auto;
@@ -235,7 +259,7 @@ pre code {
   padding: 0;
 }
 
-/* Tables */
+/* ===== Tables ===== */
 table {
   border-collapse: collapse;
   width: 100%;
@@ -243,24 +267,24 @@ table {
 }
 
 th, td {
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border-dark);
   padding: 0.5rem;
   text-align: left;
 }
 
 th {
-  background: #f5f5f5;
+  background: var(--color-code-bg);
   font-weight: 600;
 }
 
-/* Post styles */
+/* ===== Post Styles ===== */
 .post {
   margin-bottom: 3rem;
 }
 
 .post .post-header {
   margin-bottom: 2rem;
-  border-bottom: 3px solid #eee;
+  border-bottom: 3px solid var(--color-border);
   padding-bottom: 1rem;
 }
 
@@ -270,7 +294,7 @@ th {
 }
 
 .post .post-header time {
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 0.9rem;
 }
 
@@ -279,7 +303,11 @@ th {
   line-height: 1.7;
 }
 
-/* Error page */
+.w {
+  max-width: 800px;
+}
+
+/* ===== Error Page ===== */
 .error {
   text-align: center;
   margin-top: 3rem;
@@ -290,11 +318,11 @@ th {
   margin-bottom: 1rem;
 }
 
-/* Posts page */
+/* ===== Posts List Page ===== */
 .posts h1 {
   margin-bottom: 2rem;
   font-size: 2rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .post-list {
@@ -305,7 +333,7 @@ th {
 
 .post-item {
   padding: 1rem 0;
-  border-bottom: 3px solid #eee;
+  border-bottom: 3px solid var(--color-border);
 }
 
 .post-item:last-child {
@@ -325,45 +353,22 @@ th {
   margin: 0;
   font-size: 1.1rem;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text);
   flex: 1;
 }
 
 .post-item time {
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 0.9rem;
   margin-left: 1rem;
   flex-shrink: 0;
 }
 
 .post-item:hover h2 {
-  color: #0066cc;
+  color: var(--color-link);
 }
 
-/* Dark mode for posts */
-@media (prefers-color-scheme: dark) {
-  .posts h1 {
-    color: #e0e0e0;
-  }
-  
-  .post-item {
-    border-bottom-color: #444;
-  }
-  
-  .post-item h2 {
-    color: #e0e0e0;
-  }
-  
-  .post-item:hover h2 {
-    color: #4a9eff;
-  }
-  
-  .post-item time {
-    color: #aaa;
-  }
-}
-
-/* Home intro with icon */
+/* ===== Home Intro ===== */
 .home-intro {
   margin-bottom: 3rem;
 }
@@ -401,7 +406,7 @@ th {
 .intro-text p {
   font-size: 1.1rem;
   margin-bottom: 1.5rem;
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
 .intro-text blockquote {
@@ -409,8 +414,7 @@ th {
   margin-top: 0;
 }
 
-
-/* Responsive */
+/* ===== Responsive ===== */
 @media (max-width: 600px) {
   body {
     padding: 1rem;
@@ -459,58 +463,17 @@ th {
     font-size: 0.85rem;
   }
   
-  /* Balance article title size on small screens */
-  
   header {
     align-items: flex-start;
     gap: 1rem;
   }
   
   nav ul {
-    gap: 1.5rem;
+    gap: 0.75rem;
+    flex-wrap: wrap;
   }
-}
-
-/* Ensure dark mode overrides come after base rules to win cascade */
-@media (prefers-color-scheme: dark) {
-  /* Tables */
-  th, td {
-    border-color: #444;
-  }
-
-  th {
-    background: #2a2a2a;
-  }
-
-  /* Inline and block code */
-  code {
-    background: #2a2a2a;
-  }
-
-  pre {
-    background: #1a1a1a;
-  }
-
-  /* Article elements that had more specific/light defaults later */
-  article blockquote {
-    background-color: #2a2a2a;
-  }
-
-  /* Increase blockquote text contrast on dark backgrounds */
-  blockquote {
-    color: #bbb;
-  }
-
-  article hr {
-    border-top-color: #444;
-  }
-
-  .post .post-header {
-    border-bottom-color: #444;
-  }
-
-  /* Improve readability of intro text */
-  .intro-text p {
-    color: #aaa;
+  
+  .theme-toggle {
+    order: -1;
   }
 }

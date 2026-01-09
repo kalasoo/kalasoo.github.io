@@ -1,4 +1,3 @@
-// Simple, clean app - let Vite handle HMR
 console.log('🚀 App.js loading...')
 
 import MarkdownIt from 'markdown-it'
@@ -6,6 +5,44 @@ import matter from 'gray-matter'
 import toml from 'toml'
 
 console.log('📦 Dependencies loaded, importing content...')
+
+function initThemeToggle() {
+  const STORAGE_KEY = 'theme-preference'
+  
+  function getStoredTheme() {
+    return localStorage.getItem(STORAGE_KEY) || 'auto'
+  }
+  
+  function setStoredTheme(theme) {
+    localStorage.setItem(STORAGE_KEY, theme)
+  }
+  
+  function applyTheme(theme) {
+    const root = document.documentElement
+    if (theme === 'auto') {
+      root.removeAttribute('data-theme')
+    } else {
+      root.setAttribute('data-theme', theme)
+    }
+    
+    document.querySelectorAll('[data-theme-btn]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.themeBtn === theme)
+    })
+  }
+  
+  const storedTheme = getStoredTheme()
+  applyTheme(storedTheme)
+  
+  document.querySelectorAll('[data-theme-btn]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const theme = btn.dataset.themeBtn
+      setStoredTheme(theme)
+      applyTheme(theme)
+    })
+  })
+}
+
+initThemeToggle()
 
 import { content } from '../content/index.js'
 
@@ -185,6 +222,9 @@ document.addEventListener('click', (e) => {
   }
 
   function isDarkMode() {
+    const theme = document.documentElement.getAttribute('data-theme')
+    if (theme === 'dark') return true
+    if (theme === 'light') return false
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 
@@ -294,18 +334,28 @@ document.addEventListener('click', (e) => {
   // Start immediately
   start()
 
-  // Redraw current frame when color scheme changes
+  function updateFaviconColors() {
+    rebuildLetterCanvases()
+    drawFrame(t)
+    const link = ensureFaviconLink()
+    link.type = 'image/png'
+    link.href = canvas.toDataURL('image/png')
+  }
+
   if (window.matchMedia) {
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
-    mq.addEventListener?.('change', () => {
-      rebuildLetterCanvases()
-      // Redraw immediately with new colors
-      drawFrame(t)
-      const link = ensureFaviconLink()
-      link.type = 'image/png'
-      link.href = canvas.toDataURL('image/png')
-    })
+    mq.addEventListener?.('change', updateFaviconColors)
   }
+
+  const observer = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.attributeName === 'data-theme') {
+        updateFaviconColors()
+        break
+      }
+    }
+  })
+  observer.observe(document.documentElement, { attributes: true })
 
   // Pause when tab hidden, resume when visible
   document.addEventListener('visibilitychange', () => {

@@ -169,6 +169,13 @@ const getTemplate = (content, title = siteConfig.title, assetPaths, meta = {}) =
         <ul>
           <li><a href="/about">about</a></li>
           <li><a href="/posts">all posts</a></li>
+          <li>
+            <div class="theme-toggle">
+              <button data-theme-btn="light" title="Light mode">☀️</button>
+              <button data-theme-btn="auto" title="Auto (system)" class="active">A</button>
+              <button data-theme-btn="dark" title="Dark mode">🌙</button>
+            </div>
+          </li>
         </ul>
       </nav>
     </header>
