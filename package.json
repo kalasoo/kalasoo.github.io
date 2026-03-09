@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build && node build-ssg.js",
     "preview": "vite preview",
-    "deploy": "npm run build"
+    "deploy": "bun run build"
   },
   "devDependencies": {
     "vite": "^5.0.0",
