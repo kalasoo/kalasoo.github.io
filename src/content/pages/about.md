@@ -14,7 +14,7 @@ description = "阴明（Yin Ming）的经历、项目、联系方式、兴趣、
 | 2015-2019 | Founder and CEO, Xitu Inc.| [掘金](https://juejin.cn) |
 | 2019-2024 | Product Lead, ByteDance Ltd. | [百科](https://baike.com), [TikTok](https://tiktok.com), [CapCut](https://capcut.com) |
 | 2025- | One-person whatever... | [VibeCafé](https://vibecafe.ai) |
-| 2026- | Founder, Developer and Creator | [Vibe42](https://vibe42.ai) |
+| 2026- | Founder, Developer and Creator | [Mopan](https://mopan.ai) |
 
 ### Contact
 
