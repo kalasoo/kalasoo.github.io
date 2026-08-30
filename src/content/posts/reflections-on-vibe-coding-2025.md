@@ -1,5 +1,6 @@
 +++
 title = '2025 年的 Vibe Coding 思考｜Reflections on Vibe Coding in 2025'
+description = '从需求发现、用户共创和创作者变化出发，总结 2025 年 Vibe Coding 的发展，并预测 2026 年的模型、媒介与平台趋势。'
 date = '2025-11-17'
 draft = false
 +++

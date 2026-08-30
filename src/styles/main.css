@@ -79,14 +79,14 @@ header {
   padding-bottom: 1rem;
 }
 
-header h1 {
+header .site-title {
   font-size: 0.95rem;
   margin: 0;
   font-weight: 500;
   line-height: 1.6;
 }
 
-header h1 a {
+header .site-title a {
   text-decoration: none;
   color: inherit;
   padding: 0.5rem 0;

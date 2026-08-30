@@ -2,7 +2,8 @@
 export const siteConfig = {
   // Basic site info
   title: '@kalasoo',
-  description: 'kalasoo\'s blog',
+  description: '阴明的个人博客，记录 AI、Vibe Coding、产品、内容平台与科技社会的长期思考。',
+  seoTitle: '阴明 kalasoo',
   baseURL: 'https://yinming.me',
   languageCode: 'zh-cn',
   

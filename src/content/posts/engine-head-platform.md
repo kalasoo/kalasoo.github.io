@@ -1,5 +1,6 @@
 +++
 title = '引擎、头部内容、平台｜Engine, Head Content, Platform'
+description = '从 Epic Games、TikTok 与内容产业出发，讨论生产引擎、头部内容和平台之间的关系，以及平台机会如何形成。'
 date = '2024-12-23'
 +++
 

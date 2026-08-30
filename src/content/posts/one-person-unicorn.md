@@ -1,5 +1,6 @@
 +++
 title = '一人独角兽｜One Person Unicorn'
+description = '从超级个体、Solopreneur 与一人独角兽出发，讨论 AI 如何让个人获得过去需要大型团队才能实现的创造力与商业规模。'
 date = 2025-03-10T20:21:11+08:00
 draft = false
 +++

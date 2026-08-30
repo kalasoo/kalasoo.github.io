@@ -35,9 +35,9 @@ src/
 │   ├── pages/                # Static pages (about, etc.)
 │   └── posts/                # Blog posts
 ├── js/
-│   ├── app.js               # Main application logic
-│   ├── config.js            # Site configuration
-│   ├── build.js             # Build utilities
+│   ├── app.js               # Production theme and favicon runtime
+│   ├── dev-router.js        # Development-only content router
+│   ├── config.js            # Site and SEO configuration
 │   └── rss.js               # RSS feed generation
 └── styles/
     └── main.css             # All styling
@@ -67,11 +67,13 @@ npm run build
 npm run preview
 ```
 
-The build process now generates static HTML files for optimal SEO:
-- Each post becomes a standalone HTML file (`/posts/filename.html`)
-- Each page becomes a standalone HTML file (`/about.html`, etc.)
-- Home page includes recent posts list
-- All pages include proper meta tags and structured content
+The build process generates static HTML and discovery files:
+- Each published post becomes a standalone HTML file (`/posts/filename.html`)
+- Each published page becomes a standalone HTML file (`/about.html`, etc.)
+- Draft content is excluded from pages, lists, RSS, and the sitemap
+- Home page includes the recent posts list
+- All pages include page-specific metadata and structured data
+- `sitemap.xml`, `robots.txt`, and `rss.xml` are generated automatically
 
 ### Deployment
 
@@ -116,7 +118,7 @@ npm run deploy
 
 ### New Blog Post
 1. Create new `.md` file in `src/content/posts/`
-2. Add TOML frontmatter with title, date, draft status
+2. Add TOML frontmatter with title, search metadata, date, and draft status
 3. Run `npm run dev` to see changes immediately (auto-detected by `src/content/index.js`)
 4. Run `npm run build` to generate static HTML
 
@@ -127,12 +129,14 @@ npm run deploy
 4. Run `npm run build` to generate static HTML
 
 ### Static Generation
-Run `npm run build` to generate static HTML files. The build process will:
-- Automatically scan all markdown files in `src/content/posts/` and `src/content/pages/`
-- Generate HTML files in `dist/` directory
-- Create `/posts/filename.html` for each post
-- Create `/filename.html` for each page
+Run `npm run build` to generate static output. The build process will:
+- Scan markdown files in `src/content/posts/` and `src/content/pages/`
+- Exclude files with `draft = true`
+- Generate HTML files in `dist/`
+- Create `/posts/filename.html` for each published post
+- Create `/filename.html` for each published page
 - Update `dist/index.html` with recent posts
+- Generate `sitemap.xml`, `robots.txt`, and `rss.xml`
 
 **Note**: Content is automatically detected by `src/content/index.js` (for development) and `build-ssg.js` (for production). No manual registration needed - just create the markdown file!
 
@@ -142,9 +146,11 @@ Place in `public/` directory and reference with `/filename.ext`
 ## Content Format
 
 ### Frontmatter (TOML)
+
 ```toml
 +++
 title = "Post Title"
+description = "A specific summary for search and social previews."
 date = "2024-01-01"
 draft = false
 +++
@@ -163,7 +169,8 @@ Located in `src/js/config.js`:
 ```javascript
 export const siteConfig = {
   title: '@kalasoo',
-  description: 'kalasoo\'s blog',
+  description: '阴明的个人博客，记录 AI、Vibe Coding、产品、内容平台与科技社会的长期思考。',
+  seoTitle: '阴明 kalasoo',
   baseURL: 'https://yinming.me',
   languageCode: 'zh-cn',
   googleAnalytics: 'G-VGRZT9T626',
