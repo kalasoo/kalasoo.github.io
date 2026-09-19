@@ -5,33 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>阴明 kalasoo</title>
   <meta name="description" content="阴明的个人博客，记录 AI、Vibe Coding、产品、内容平台与科技社会的长期思考。">
+  <meta name="theme-color" content="#f2f2f2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+  <script>
+    // Paint the stored theme before first paint to avoid a light flash.
+    try {
+      const stored = localStorage.getItem('theme-preference')
+      if (stored && stored !== 'auto') document.documentElement.dataset.theme = stored
+    } catch {}
+  </script>
   <link rel="icon" type="image/png" href="/icon.png">
   <link rel="stylesheet" href="/src/styles/main.css">
 </head>
-<body>
-  <div class="container">
-    <header>
-      <h1 class="site-title"><a href="/">@kalasoo</a></h1>
-      <nav>
-        <ul>
-          <li><a href="/about">about</a></li>
-          <li><a href="/posts">all posts</a></li>
-          <li>
-            <div class="theme-toggle">
-              <button data-theme-btn="light" title="Light mode">☀️</button>
-              <button data-theme-btn="auto" title="Auto (system)" class="active">A</button>
-              <button data-theme-btn="dark" title="Dark mode">🌙</button>
-            </div>
-          </li>
-        </ul>
-      </nav>
+<body class="page page--home">
+  <div class="shell">
+    <header class="site-header">
+      <div class="site-header__bar">
+        <h1 class="site-title"><a href="/">@kalasoo</a></h1>
+        <div class="site-header__actions">
+          <nav class="site-nav" aria-label="Main">
+            <ul>
+              <li><a href="/about">about</a></li>
+              <li><a href="/posts">all posts</a></li>
+            </ul>
+          </nav>
+          <div class="theme-toggle" role="group" aria-label="Theme">
+            <button type="button" data-theme-btn="light" title="Light mode" aria-label="Light mode">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="4.1" />
+                <path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6" />
+              </svg>
+            </button>
+            <button type="button" data-theme-btn="auto" title="Auto (system)" aria-label="Auto theme" class="active">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="7.6" fill="none" stroke="currentColor" stroke-width="1.7" />
+                <path d="M12 4.4a7.6 7.6 0 0 1 0 15.2z" fill="currentColor" />
+              </svg>
+            </button>
+            <button type="button" data-theme-btn="dark" title="Dark mode" aria-label="Dark mode">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
     </header>
 
     <main>
       <div id="content"></div>
     </main>
   </div>
-  
+
   <script type="module" src="/src/js/app.js"></script>
 </body>
 </html>

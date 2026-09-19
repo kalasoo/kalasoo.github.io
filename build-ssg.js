@@ -15,6 +15,10 @@ const md = new MarkdownIt({
   typographer: true
 })
 
+// Tables render inside a scroll container so wide data stays readable on phones.
+md.renderer.rules.table_open = () => '<div class="table-wrap">\n<table>\n'
+md.renderer.rules.table_close = () => '</table>\n</div>\n'
+
 function extractDescription(html, maxLength = 160) {
   const text = html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
   if (text.length <= maxLength) return text
@@ -191,9 +195,14 @@ const getTemplate = (content, title = siteConfig.title, assetPaths, meta = {}) =
 
   const isHomePage = url === siteConfig.baseURL
   const siteTitle = `<a href="/">${escapeHtml(siteConfig.title)}</a>`
+  // Same wordmark top-left on every page; the home page just carries the h1.
   const brand = isHomePage
     ? `<h1 class="site-title">${siteTitle}</h1>`
     : `<div class="site-title">${siteTitle}</div>`
+  const navLink = item => {
+    const current = meta.nav === item.url.replace('/', '')
+    return `<a href="${item.url}"${current ? ' aria-current="page"' : ''}>${item.title}</a>`
+  }
 
   return `<!DOCTYPE html>
 <html lang="${escapeHtml(siteConfig.languageCode)}">
@@ -226,27 +235,52 @@ const getTemplate = (content, title = siteConfig.title, assetPaths, meta = {}) =
 ${serializeJsonLd(structuredData)}
   </script>
 
+  <meta name="theme-color" content="#f2f2f2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+  <script>
+    // Paint the stored theme before first paint to avoid a light flash.
+    try {
+      const stored = localStorage.getItem('theme-preference')
+      if (stored && stored !== 'auto') document.documentElement.dataset.theme = stored
+    } catch {}
+  </script>
+
   <link rel="icon" type="image/png" href="/icon.png">
   <link rel="alternate" type="application/rss+xml" title="${escapeHtml(siteConfig.title)} RSS" href="/rss.xml">
   <link rel="stylesheet" href="${escapeHtml(assetPaths.cssPath)}">
 </head>
-<body>
-  <div class="container">
-    <header>
-      ${brand}
-      <nav>
-        <ul>
-          <li><a href="/about">about</a></li>
-          <li><a href="/posts">all posts</a></li>
-          <li>
-            <div class="theme-toggle">
-              <button data-theme-btn="light" title="Light mode">☀️</button>
-              <button data-theme-btn="auto" title="Auto (system)" class="active">A</button>
-              <button data-theme-btn="dark" title="Dark mode">🌙</button>
-            </div>
-          </li>
-        </ul>
-      </nav>
+<body class="${escapeHtml(['page', meta.pageClass].filter(Boolean).join(' '))}">
+  <div class="shell">
+    <header class="site-header">
+      <div class="site-header__bar">
+        ${brand}
+        <div class="site-header__actions">
+          <nav class="site-nav" aria-label="Main">
+            <ul>
+              ${siteConfig.menu.map(item => `<li>${navLink(item)}</li>`).join('\n              ')}
+            </ul>
+          </nav>
+          <div class="theme-toggle" role="group" aria-label="Theme">
+            <button type="button" data-theme-btn="light" title="Light mode" aria-label="Light mode">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="4.1" />
+                <path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6" />
+              </svg>
+            </button>
+            <button type="button" data-theme-btn="auto" title="Auto (system)" aria-label="Auto theme" class="active">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="7.6" fill="none" stroke="currentColor" stroke-width="1.7" />
+                <path d="M12 4.4a7.6 7.6 0 0 1 0 15.2z" fill="currentColor" />
+              </svg>
+            </button>
+            <button type="button" data-theme-btn="dark" title="Dark mode" aria-label="Dark mode">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
     </header>
 
     <main>
@@ -261,76 +295,99 @@ ${serializeJsonLd(structuredData)}
 </html>`
 }
 
-function renderContent(frontmatter, html) {
+function renderContent(frontmatter, html, options = {}) {
+  const footer = options.footer
+
   return `
-    <article class="post">
-      <div class="post-header">
+    <article class="entry">
+      <header class="post__head">
+        ${frontmatter.date ? `<p class="post__meta">${renderDate(frontmatter.date)}</p>` : ''}
         <h1>${escapeHtml(frontmatter.title || 'Untitled')}</h1>
-        ${frontmatter.date ? renderDate(frontmatter.date) : ''}
-      </div>
-      <div class="content">
-        ${html}
+      </header>
+      <div class="post">
+        <div class="content">
+          ${html}
+        </div>
+        ${footer ? `<footer class="post__foot"><a class="chip" href="${footer.href}">${footer.label}</a></footer>` : ''}
       </div>
     </article>
   `
+}
+
+// Home grid: the newest post gets the large tile, the fifth a wide one, which
+// fills the three-column bento exactly for both five and ten posts.
+function postCard(post, index) {
+  const variant = index === 0 ? ' post-card--feature' : (index === 4 ? ' post-card--wide' : '')
+
+  return `
+          <li class="post-card${variant}">
+            <a href="${escapeHtml(post.route)}">
+              ${renderDate(post.frontmatter.date)}
+              <h2 class="post-card__title">${escapeHtml(post.frontmatter.title)}</h2>
+              <p class="post-card__desc">${escapeHtml(post.frontmatter.description || extractDescription(post.html, index === 0 ? 180 : 120))}</p>
+            </a>
+          </li>`
 }
 
 function renderHomePage(posts) {
   const recentPosts = posts.slice(0, 10)
 
   return `
-    <article class="home-intro">
-      <div class="intro-content">
-        <div class="intro-icon">
-          <img src="/icon.png" alt="Yin Ming" class="profile-icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+    <article class="hero">
+      <div class="hero__profile">
+        <div class="hero__aside">
+          <img src="/icon.png" alt="Yin Ming" class="hero__avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
           <div class="icon-placeholder" style="display: none;">👨‍💻</div>
         </div>
-        <div class="intro-text">
-          <blockquote>
-            We can only see a short distance ahead, but we can see plenty there that needs to be done. - Alan Turing
+        <div class="hero__body">
+          <blockquote class="hero__quote">
+            <p>We can only see a short distance ahead, but we can see plenty there that needs to be done.</p>
+            <cite>Alan Turing</cite>
           </blockquote>
-
-          <p>我叫<strong>阴明</strong>，我的工作致力于寻找人类与科技健康共存的方法，存续人类文明。
-          <br/>
-          My name is <strong>Yin Ming</strong>, and my work is dedicated to discovering ways for humanity and technology to coexist in harmony, thereby preserving human civilization.</p>
-
-          <p>You can find me on <a href="https://t.me/kalasoo">Telegram</a>, <a href="https://x.com/kalasoo">X</a>, <a href="https://github.com/kalasoo">GitHub</a> or learn more <a href="/about">about me</a></p>
+          <p class="hero__lead">我叫<strong>阴明</strong>，我的工作致力于寻找人类与科技健康共存的方法，存续人类文明。</p>
+          <p class="hero__lead hero__lead--en">My name is <strong>Yin Ming</strong>, and my work is dedicated to discovering ways for humanity and technology to coexist in harmony, thereby preserving human civilization.</p>
+          <div class="hero__contact">
+            <p class="hero__note">You can find me on</p>
+            <ul class="chips">
+              <li><a class="chip" href="https://t.me/kalasoo">Telegram</a></li>
+              <li><a class="chip" href="https://x.com/kalasoo">X</a></li>
+              <li><a class="chip" href="https://github.com/kalasoo">GitHub</a></li>
+              <li><a class="chip" href="/about">About me</a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </article>
 
-    <section class="recent-posts-section">
-      <h2>Recent Posts</h2>
-      <ul class="post-list">
-        ${recentPosts.map(post => `
-          <li class="post-item">
-            <a href="${escapeHtml(post.route)}">
-              <h2>${escapeHtml(post.frontmatter.title)}</h2>
-              ${renderDate(post.frontmatter.date)}
-            </a>
-          </li>
-        `).join('')}
+    <section class="section">
+      <div class="section__head">
+        <h2 class="section__label">Recent Posts</h2>
+        <a class="section__link" href="/posts">All posts →</a>
+      </div>
+      <ul class="bento">
+        ${recentPosts.map(postCard).join('')}
       </ul>
-      <p><a href="/posts">See all posts →</a></p>
     </section>
   `
 }
 
 function renderPostsPage(posts) {
   return `
-    <div class="posts">
+    <div class="page-head">
       <h1>All Posts</h1>
-      <ul class="post-list">
-        ${posts.map(post => `
-          <li class="post-item">
-            <a href="${escapeHtml(post.route)}">
-              <h2>${escapeHtml(post.frontmatter.title)}</h2>
-              ${renderDate(post.frontmatter.date)}
-            </a>
-          </li>
-        `).join('')}
-      </ul>
     </div>
+    <ul class="post-rows">
+      ${posts.map(post => `
+        <li class="post-row">
+          <a href="${escapeHtml(post.route)}">
+            <div>
+              <h2 class="post-row__title">${escapeHtml(post.frontmatter.title)}</h2>
+              <p class="post-row__desc">${escapeHtml(post.frontmatter.description || extractDescription(post.html, 120))}</p>
+            </div>
+            ${renderDate(post.frontmatter.date)}
+          </a>
+        </li>`).join('')}
+    </ul>
   `
 }
 
@@ -412,7 +469,9 @@ async function buildStatic() {
       description: page.frontmatter.description || extractDescription(page.html),
       url: `${siteConfig.baseURL}/${page.filename}`,
       type: 'website',
-      schemaType: page.filename === 'about' ? 'profile' : 'webpage'
+      schemaType: page.filename === 'about' ? 'profile' : 'webpage',
+      pageClass: 'page--article',
+      nav: page.filename === 'about' ? 'about' : undefined
     }
     const html = getTemplate(content, page.frontmatter.title, assetPaths, meta)
     const outputPath = path.join(distDir, `${page.filename}.html`)
@@ -426,11 +485,15 @@ async function buildStatic() {
     const route = `/posts/${post.filename}`
     post.route = route
 
-    const content = renderContent(post.frontmatter, post.html)
+    const content = renderContent(post.frontmatter, post.html, {
+      footer: { href: '/posts', label: 'All posts' }
+    })
     const meta = {
       description: post.frontmatter.description || extractDescription(post.html),
       url: `${siteConfig.baseURL}/posts/${post.filename}`,
       type: 'article',
+      pageClass: 'page--article',
+      nav: 'posts',
       image: post.frontmatter.image
         ? new URL(post.frontmatter.image, siteConfig.baseURL).href
         : undefined,
@@ -449,7 +512,8 @@ async function buildStatic() {
   const homeMeta = {
     description: siteConfig.description,
     url: siteConfig.baseURL,
-    type: 'website'
+    type: 'website',
+    pageClass: 'page--home'
   }
   const homeHtml = getTemplate(homeContent, siteConfig.title, assetPaths, homeMeta)
   const homePath = path.join(distDir, 'index.html')
@@ -462,7 +526,9 @@ async function buildStatic() {
     description: '阴明关于 AI、产品、内容平台、科技与社会的全部文章。',
     url: `${siteConfig.baseURL}/posts`,
     type: 'website',
-    schemaType: 'collection'
+    schemaType: 'collection',
+    pageClass: 'page--list',
+    nav: 'posts'
   }
   const postsHtml = getTemplate(postsContent, 'All Posts', assetPaths, postsIndexMeta)
   const postsIndexPath = path.join(postsDir, 'index.html')
