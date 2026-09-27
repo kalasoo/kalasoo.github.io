@@ -95,7 +95,7 @@ initThemeToggle()
     const textColor = isDarkMode() ? '#e0e0e0' : '#222'
     cctx.textAlign = 'center'
     cctx.textBaseline = 'middle'
-    cctx.font = '700 44px -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Menlo, monospace'
+    cctx.font = '700 44px "Schibsted Grotesk", -apple-system, Segoe UI, Roboto, sans-serif'
     cctx.fillStyle = textColor
     cctx.fillText(letter, size / 2, size / 2)
     return c
