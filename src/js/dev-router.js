@@ -199,7 +199,7 @@ function renderHomePage() {
     <section class="section">
       <div class="section__head">
         <h2 class="section__label">Recent posts</h2>
-        <a class="section__link" href="/posts">Posts →</a>
+        <a class="chip" href="/posts">Posts →</a>
       </div>
       <ul class="bento">
         ${posts.map(postCard).join('')}

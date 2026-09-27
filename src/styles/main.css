@@ -31,6 +31,7 @@
 
   /* type: big, light and tight for display, small and spaced for labels */
   --type-display: clamp(2.5rem, 6vw, 4.75rem);
+  --type-section: clamp(1.35rem, 2.2vw, 1.85rem);
   --type-title: clamp(1.5rem, 2.9vw, 2.35rem);
   --type-lead: clamp(1.2rem, 1.4vw + .95rem, 1.6rem);
   --type-label: .72rem;
@@ -386,7 +387,7 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 
 .section__head {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: var(--gap);
@@ -395,19 +396,10 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 
 .section__label {
   margin: 0;
-  color: var(--text-3);
-  font-size: var(--type-label);
-  font-weight: 700;
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-}
-
-.section__link {
-  font-size: var(--type-label);
-  font-weight: 700;
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-  white-space: nowrap;
+  font-size: var(--type-section);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
+  line-height: 1.1;
 }
 
 /* ===== Home: bento grid ================================================== */
