@@ -251,6 +251,10 @@ document.addEventListener('click', event => {
     return
   }
 
+  // In-page anchors (#heading) stay native: there is nothing to re-render, and
+  // the browser owns the jump.
+  if (link.hash && link.pathname === window.location.pathname) return
+
   event.preventDefault()
   window.history.pushState({}, '', link.href)
   handleRoute()
