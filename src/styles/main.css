@@ -2,8 +2,11 @@
    kalasoo — visual system
    Rule book: no borders, no rules, no dividers. Hierarchy comes from surface
    colour blocks, generous radii and a loud type scale.
-   Surfaces:  bg (canvas) → surface-1 (cards) → surface-2 (blocks in cards)
-              → surface-3 (chips / inline code / table head)
+   Type: one editorial voice everywhere — display type is big, light and tight
+   (--type-display / --weight-display / --track-display), titles share
+   --type-title, labels are small, uppercase and letter-spaced (--type-label /
+   --track-label). Surfaces:  bg (canvas) → surface-1 (cards) → surface-2
+              (blocks in cards) → surface-3 (chips / inline code / table head)
    ========================================================================== */
 
 :root {
@@ -25,6 +28,16 @@
   --link: #1b57cc;
   --link-hover: #10389b;
 
+
+  /* type: big, light and tight for display, small and spaced for labels */
+  --type-display: clamp(2.5rem, 6vw, 4.75rem);
+  --type-title: clamp(1.5rem, 2.9vw, 2.35rem);
+  --type-lead: clamp(1.2rem, 1.4vw + .95rem, 1.6rem);
+  --type-label: .72rem;
+  --track-display: -.045em;
+  --track-title: -.035em;
+  --track-label: .13em;
+  --weight-display: 620;
 
   /* geometry */
   --r-sm: .75rem;
@@ -206,9 +219,9 @@ a:hover {
   padding: .55rem .8rem;
   border-radius: var(--r-pill);
   color: var(--text-2);
-  font-size: .72rem;
-  font-weight: 600;
-  letter-spacing: .11em;
+  font-size: var(--type-label);
+  font-weight: 700;
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -318,21 +331,27 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 }
 
 .hero__lead {
-  margin: 1.25rem 0 0;
+  margin: 1.5rem 0 0;
   color: var(--text-1);
-  font-size: clamp(1rem, .6vw + .85rem, 1.15rem);
-  line-height: 1.75;
+  font-size: var(--type-lead);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
+  line-height: 1.35;
   text-wrap: pretty;
 }
 
 .hero__lead--en {
-  margin-top: .85rem;
+  margin-top: .7rem;
   color: var(--text-2);
+  font-size: clamp(1rem, .4vw + .9rem, 1.1rem);
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.65;
 }
 
 .hero__lead strong {
   color: var(--text-1);
-  font-weight: 650;
+  font-weight: 680;
 }
 
 .chips {
@@ -352,9 +371,9 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
   border-radius: var(--r-pill);
   background: var(--surface-2);
   color: var(--text-2);
-  font-size: .72rem;
+  font-size: var(--type-label);
   font-weight: 700;
-  letter-spacing: .11em;
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
 }
 
@@ -393,16 +412,16 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 .section__label {
   margin: 0;
   color: var(--text-3);
-  font-size: .72rem;
+  font-size: var(--type-label);
   font-weight: 700;
-  letter-spacing: .16em;
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
 }
 
 .section__link {
-  font-size: .72rem;
+  font-size: var(--type-label);
   font-weight: 700;
-  letter-spacing: .16em;
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -454,9 +473,9 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 }
 
 .post-card time {
-  font-size: .7rem;
+  font-size: var(--type-label);
   font-weight: 700;
-  letter-spacing: .14em;
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: color-mix(in srgb, currentColor 55%, transparent);
 }
@@ -464,14 +483,14 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 .post-card__title {
   margin: auto 0 0;
   padding-top: clamp(1.5rem, 4vw, 2.75rem);
-  font-weight: 620;
-  letter-spacing: -.035em;
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
   line-height: 1.05;
   text-wrap: balance;
 }
 
 .post-card--half .post-card__title {
-  font-size: clamp(1.5rem, 2.9vw, 2.35rem);
+  font-size: var(--type-title);
   line-height: 1.08;
 }
 
@@ -480,9 +499,8 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 }
 
 .post-card--cover .post-card__title {
-  font-size: clamp(2.5rem, 6vw, 4.75rem);
-  font-weight: 600;
-  letter-spacing: -.045em;
+  font-size: var(--type-display);
+  letter-spacing: var(--track-display);
   line-height: 1;
 }
 
@@ -540,57 +558,63 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 
 .post-rows {
   display: grid;
-  gap: .7rem;
+  gap: clamp(.5rem, .9vw, .7rem);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .post-row > a {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.25rem;
-  padding: clamp(.9rem, 2vw, 1.25rem) var(--pad-card);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: .35rem 1.5rem;
+  padding: clamp(1.15rem, 2.2vw, 1.7rem) var(--pad-card);
   border-radius: var(--r-lg);
   background: var(--surface-1);
   color: inherit;
-  transition: transform .28s var(--ease), background-color .28s var(--ease);
+  transition: transform .32s var(--ease), background-color .32s var(--ease),
+    color .32s var(--ease);
 }
 
-.post-row > a:hover {
-  transform: translateY(-2px);
-  background: var(--surface-hover);
+.post-row > a:hover,
+.post-row > a:focus-visible {
+  background: var(--text-1);
+  color: var(--bg);
+  transform: translateY(-4px);
 }
 
 .post-row__title {
+  grid-column: 1;
   margin: 0;
-  font-size: clamp(1.05rem, 2vw, 1.3rem);
-  font-weight: 640;
-  letter-spacing: -.018em;
-  line-height: 1.35;
+  font-size: var(--type-title);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
+  line-height: 1.08;
   text-wrap: pretty;
 }
 
 .post-row__desc {
+  grid-column: 1;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin: .4rem 0 0;
-  max-width: 48ch;
-  color: var(--text-2);
-  font-size: .9rem;
+  margin: .55rem 0 0;
+  max-width: 52ch;
+  color: color-mix(in srgb, currentColor 62%, transparent);
+  font-size: .92rem;
   line-height: 1.6;
 }
 
 .post-row time {
-  flex-shrink: 0;
-  color: var(--text-3);
-  font-size: .7rem;
-  font-weight: 600;
-  letter-spacing: .1em;
+  grid-column: 2;
+  grid-row: 1;
+  font-size: var(--type-label);
+  font-weight: 700;
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
+  color: color-mix(in srgb, currentColor 55%, transparent);
 }
 
 /* ===== Article =========================================================== */
@@ -615,19 +639,19 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
   border-radius: var(--r-pill);
   background: var(--surface-1);
   color: var(--text-2);
-  font-size: .7rem;
-  font-weight: 600;
-  letter-spacing: .1em;
+  font-size: var(--type-label);
+  font-weight: 700;
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
 }
 
 .page-head h1,
 .post__head h1 {
   margin: 0;
-  font-size: clamp(2rem, 6.4vw, 3.4rem);
-  font-weight: 800;
-  letter-spacing: -.038em;
-  line-height: 1.04;
+  font-size: var(--type-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+  line-height: 1.02;
   text-wrap: balance;
 }
 
@@ -656,27 +680,27 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 .content h4,
 .content h5,
 .content h6 {
-  font-weight: 720;
-  letter-spacing: -.022em;
-  line-height: 1.25;
+  font-weight: 650;
+  letter-spacing: var(--track-title);
+  line-height: 1.2;
   text-wrap: balance;
 }
 
 .content h2 {
-  margin-top: 2.2em;
-  font-size: clamp(1.35rem, 3vw, 1.7rem);
+  margin-top: 2.4em;
+  font-size: clamp(1.55rem, 3.2vw, 2.15rem);
 }
 
 .content h3 {
-  margin-top: 1.9em;
-  font-size: clamp(1.15rem, 2.2vw, 1.35rem);
+  margin-top: 2em;
+  font-size: clamp(1.22rem, 2.4vw, 1.55rem);
 }
 
 .content h4,
 .content h5,
 .content h6 {
-  margin-top: 1.6em;
-  font-size: 1.05rem;
+  margin-top: 1.7em;
+  font-size: 1.1rem;
 }
 
 .content h2 + *,
@@ -825,9 +849,10 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 
 .notfound h1 {
   margin: 0 0 .5rem;
-  font-size: clamp(2rem, 7vw, 3.5rem);
-  font-weight: 800;
-  letter-spacing: -.04em;
+  font-size: var(--type-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-display);
+  line-height: 1;
 }
 
 .notfound p {
@@ -882,13 +907,7 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
   }
 
   .post-row > a {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: .45rem;
-  }
-
-  .post-row time {
-    order: -1;
+    gap: .3rem .9rem;
   }
 }
 
