@@ -314,22 +314,6 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
   min-width: 0;
 }
 
-/* The Turing line: a plain code block under the bio */
-.hero__quote {
-  margin: 1.35rem 0 0;
-}
-
-.hero__quote code {
-  display: block;
-  padding: .7rem .95rem;
-  border-radius: var(--r-md);
-  background: var(--surface-3);
-  color: var(--text-2);
-  font-family: var(--font-mono);
-  font-size: .85rem;
-  line-height: 1.7;
-}
-
 .hero__lead {
   margin: 1.5rem 0 0;
   color: var(--text-1);
