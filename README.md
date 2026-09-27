@@ -197,6 +197,11 @@ export const siteConfig = {
 - Follows the OS by default; a pinned theme is applied before first paint
 - The active icon is chosen in CSS from the root `data-theme` attribute
 
+### Typography
+- Schibsted Grotesk (SIL OFL, `public/fonts`) is self-hosted as one variable file and preloaded on every page, so every weight the site uses (400–900) comes from a single request
+- The face is latin-subset on purpose: Chinese text falls through to the platform faces (PingFang SC, Hiragino Sans GB, Noto Sans CJK SC, Microsoft YaHei) rather than shipping megabytes of CJK
+- Display type is big, light and tight, labels are small, uppercase and letter-spaced — both driven by the type tokens at the top of `src/styles/main.css`
+
 ### Bilingual Support
 - Chinese (zh-CN) as primary language
 - English content mixed throughout

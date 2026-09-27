@@ -246,6 +246,7 @@ ${serializeJsonLd(structuredData)}
   </script>
 
   <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="preload" href="/fonts/schibsted-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="alternate" type="application/rss+xml" title="${escapeHtml(siteConfig.title)} RSS" href="/rss.xml">
   <link rel="stylesheet" href="${escapeHtml(assetPaths.cssPath)}">
 </head>
@@ -365,8 +366,8 @@ function renderHomePage(posts) {
           <div class="icon-placeholder" style="display: none;">👨‍💻</div>
         </div>
         <div class="hero__body">
-          <p class="hero__lead">我叫<strong>阴明</strong>，我的工作致力于寻找人类与科技健康共存的方法，存续人类文明。</p>
-          <p class="hero__lead hero__lead--en">My name is <strong>Yin Ming</strong>, and my work is dedicated to discovering ways for humanity and technology to coexist in harmony, thereby preserving human civilization.</p>
+          <p class="hero__lead">我叫<strong>阴明</strong>，我致力于寻找人类与科技健康共存的方法。</p>
+          <p class="hero__lead hero__lead--en">My name is <strong>Yin Ming</strong>, and I am dedicated to discovering ways for humanity and technology to coexist in harmony.</p>
           ${CONTACT_CHIPS}
         </div>
       </div>
