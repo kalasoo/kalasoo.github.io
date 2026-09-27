@@ -126,17 +126,22 @@ function renderContent(route) {
   `
 }
 
-function postCard(post, index) {
-  const variant = index === 0 ? ' post-card--feature' : (index === 4 ? ' post-card--wide' : '')
-  const { route, frontmatter, markdown } = post
-  const description = frontmatter.description || excerpt(markdown, index === 0 ? 180 : 120)
+// Home grid: the newest post takes the full-width cover, the rest pair off, and
+// a trailing single goes full width so the last row never ends half empty. The
+// callback gets the list as its third argument, so the total comes for free.
+function postCard(post, index, posts) {
+  const variant = index === 0
+    ? ' post-card--cover'
+    : (index === posts.length - 1 && (posts.length - 1) % 2 === 1
+        ? ' post-card--wide'
+        : ' post-card--half')
+  const { route, frontmatter } = post
 
   return `
     <li class="post-card${variant}">
       <a href="${route}">
         ${renderDate(frontmatter.date)}
-        <h2 class="post-card__title">${escapeHtml(frontmatter.title)}</h2>
-        <p class="post-card__desc">${escapeHtml(description)}</p>
+        <h3 class="post-card__title">${escapeHtml(frontmatter.title)}</h3>
       </a>
     </li>`
 }

@@ -409,93 +409,100 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 
 /* ===== Home: bento grid ================================================== */
 
+/* Cards are posters, not summaries: the title set loud, the date reduced to a
+   micro-label, and the whole block flipping to the text colour on hover or
+   keyboard focus — the site's own surface language, spent on the interaction. */
 .bento {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-auto-flow: dense;
-  gap: var(--gap);
+  gap: clamp(.5rem, .9vw, .7rem);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .post-card {
+  --card-pad: clamp(1.2rem, 2.2vw, 1.8rem);
+
+  position: relative;
   border-radius: var(--r-lg);
   background: var(--surface-1);
   overflow: hidden;
-  transition: transform .28s var(--ease), background-color .28s var(--ease);
+  transition: transform .32s var(--ease), background-color .32s var(--ease),
+    color .32s var(--ease);
 }
 
-.post-card > a,
-.post-card > .post-card__link {
+.post-card > a {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: clamp(1.15rem, 2vw, 1.6rem);
+  padding: var(--card-pad);
   color: inherit;
 }
 
-.post-card time,
-.post-row time {
-  color: var(--text-3);
+/* Read mark, sliding in on hover or focus */
+.post-card > a::after {
+  content: '\2192';
+  position: absolute;
+  top: var(--card-pad);
+  right: var(--card-pad);
+  font-size: .95rem;
+  opacity: 0;
+  transform: translateX(-.45rem);
+  transition: opacity .32s var(--ease), transform .32s var(--ease);
+}
+
+.post-card time {
   font-size: .7rem;
-  font-weight: 600;
-  letter-spacing: .1em;
+  font-weight: 700;
+  letter-spacing: .14em;
   text-transform: uppercase;
+  color: color-mix(in srgb, currentColor 55%, transparent);
 }
 
 .post-card__title {
-  margin: .5rem 0 0;
-  font-size: 1.05rem;
-  font-weight: 640;
-  letter-spacing: -.012em;
-  line-height: 1.4;
-  text-wrap: pretty;
-}
-
-.post-card:not(.post-card--feature) .post-card__title {
-  order: 1;
-  margin: 0;
-}
-
-.post-card:not(.post-card--feature) time {
-  order: 3;
-  margin-top: auto;
-  padding-top: 1rem;
-}
-
-.post-card__desc {
-  order: 2;
-  margin: .7rem 0 0;
-  color: var(--text-2);
-  font-size: .9rem;
-  line-height: 1.6;
-  text-wrap: pretty;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.post-card--feature .post-card__desc {
-  margin-top: 1rem;
-  font-size: .95rem;
-  line-height: 1.65;
-  -webkit-line-clamp: 5;
-}
-
-.post-card--feature .post-card__title {
-  font-size: clamp(1.5rem, 3.6vw, 2.35rem);
-  font-weight: 760;
-  letter-spacing: -.032em;
-  line-height: 1.12;
-  margin-top: .9rem;
+  margin: auto 0 0;
+  padding-top: clamp(1.5rem, 4vw, 2.75rem);
+  font-weight: 620;
+  letter-spacing: -.035em;
+  line-height: 1.05;
   text-wrap: balance;
 }
 
-.post-card:hover {
-  transform: translateY(-2px);
-  background: var(--surface-hover);
+.post-card--half .post-card__title {
+  font-size: clamp(1.5rem, 2.9vw, 2.35rem);
+  line-height: 1.08;
+}
+
+.post-card--cover {
+  min-height: clamp(12rem, 24vw, 18rem);
+}
+
+.post-card--cover .post-card__title {
+  font-size: clamp(2.5rem, 6vw, 4.75rem);
+  font-weight: 600;
+  letter-spacing: -.045em;
+  line-height: 1;
+}
+
+.post-card--wide .post-card__title {
+  font-size: clamp(2rem, 4vw, 3.1rem);
+  font-weight: 600;
+  letter-spacing: -.04em;
+}
+
+.post-card:hover,
+.post-card:focus-within {
+  background: var(--text-1);
+  color: var(--bg);
+  transform: translateY(-4px);
+}
+
+.post-card:hover > a::after,
+.post-card:focus-within > a::after {
+  opacity: 1;
+  transform: none;
 }
 
 @media (min-width: 40rem) {
@@ -503,24 +510,25 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .post-card--feature {
+  .post-card--cover,
+  .post-card--wide {
     grid-column: span 2;
   }
 }
 
 @media (min-width: 60rem) {
   .bento {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-auto-rows: minmax(9rem, auto);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-auto-rows: minmax(13rem, auto);
   }
 
-  .post-card--feature {
-    grid-column: span 2;
-    grid-row: span 2;
-  }
-
+  .post-card--cover,
   .post-card--wide {
-    grid-column: span 2;
+    grid-column: span 6;
+  }
+
+  .post-card--half {
+    grid-column: span 3;
   }
 }
 
@@ -578,6 +586,11 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 
 .post-row time {
   flex-shrink: 0;
+  color: var(--text-3);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
 }
 
 /* ===== Article =========================================================== */
