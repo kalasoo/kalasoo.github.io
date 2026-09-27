@@ -1,36 +1,44 @@
+// One compact button cycles auto → light → dark; the icon follows the pin.
 function initThemeToggle() {
   const STORAGE_KEY = 'theme-preference'
-  
-  function getStoredTheme() {
-    return localStorage.getItem(STORAGE_KEY) || 'auto'
+  const MODES = ['auto', 'light', 'dark']
+  const LABELS = { auto: 'auto (system)', light: 'light', dark: 'dark' }
+  const toggle = document.querySelector('[data-theme-toggle]')
+
+  function describe(mode) {
+    const next = MODES[(MODES.indexOf(mode) + 1) % MODES.length]
+    return `Theme: ${LABELS[mode]} — click for ${LABELS[next]}`
   }
-  
-  function setStoredTheme(theme) {
-    localStorage.setItem(STORAGE_KEY, theme)
-  }
-  
-  function applyTheme(theme) {
+
+  function applyTheme(mode) {
     const root = document.documentElement
-    if (theme === 'auto') {
+    if (mode === 'auto') {
       root.removeAttribute('data-theme')
     } else {
-      root.setAttribute('data-theme', theme)
+      root.setAttribute('data-theme', mode)
     }
-    
-    document.querySelectorAll('[data-theme-btn]').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.themeBtn === theme)
-    })
+
+    if (toggle) {
+      const label = describe(mode)
+      toggle.title = label
+      toggle.setAttribute('aria-label', label)
+    }
   }
-  
-  const storedTheme = getStoredTheme()
-  applyTheme(storedTheme)
-  
-  document.querySelectorAll('[data-theme-btn]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const theme = btn.dataset.themeBtn
-      setStoredTheme(theme)
-      applyTheme(theme)
-    })
+
+  let stored = null
+  try {
+    stored = localStorage.getItem(STORAGE_KEY)
+  } catch {}
+
+  let mode = MODES.includes(stored) ? stored : 'auto'
+  applyTheme(mode)
+
+  toggle?.addEventListener('click', () => {
+    mode = MODES[(MODES.indexOf(mode) + 1) % MODES.length]
+    try {
+      localStorage.setItem(STORAGE_KEY, mode)
+    } catch {}
+    applyTheme(mode)
   })
 }
 

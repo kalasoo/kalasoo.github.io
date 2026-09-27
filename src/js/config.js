@@ -28,7 +28,7 @@ export const siteConfig = {
       url: '/about'
     },
     {
-      title: 'all posts',
+      title: 'posts',
       url: '/posts'
     }
   ],

@@ -192,6 +192,11 @@ export const siteConfig = {
 - Respects dark/light mode preferences
 - Pauses when tab is hidden
 
+### Theme Control
+- One header button cycles auto (system) → light → dark, stored as `theme-preference`
+- Follows the OS by default; a pinned theme is applied before first paint
+- The active icon is chosen in CSS from the root `data-theme` attribute
+
 ### Bilingual Support
 - Chinese (zh-CN) as primary language
 - English content mixed throughout
@@ -252,6 +257,6 @@ export const siteConfig = {
 ## Customization
 
 - **Styling**: Edit `src/styles/main.css`
-- **Navigation**: Edit the nav section in `index.html`
+- **Navigation**: Edit the `siteConfig.menu` entries in `src/js/config.js` (the dev entry `index.html` mirrors the same links)
 - **Site config**: Edit `src/js/config.js` for site-wide settings
 - **Content**: Add new posts/pages in `src/content/` directories

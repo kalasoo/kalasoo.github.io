@@ -42,7 +42,7 @@ test('every indexable page has complete, unambiguous metadata', async () => {
   const files = (await htmlFiles(distDir))
     .filter(file => path.basename(file) !== '404.html')
 
-  assert.equal(files.length, 7)
+  assert.equal(files.length, 8)
 
   for (const file of files) {
     const html = await readFile(file, 'utf8')
@@ -97,16 +97,16 @@ test('page-specific search metadata and schemas are emitted', async () => {
 test('sitemap contains only canonical URLs and accurate modification dates', async () => {
   const sitemap = await readFile(path.join(distDir, 'sitemap.xml'), 'utf8')
 
-  assert.equal((sitemap.match(/<url>/g) || []).length, 7)
+  assert.equal((sitemap.match(/<url>/g) || []).length, 8)
   assert.doesNotMatch(sitemap, /<(?:priority|changefreq)>/)
-  assert.match(sitemap, /<loc>https:\/\/yinming\.me\/posts<\/loc>\s*<lastmod>2025-11-17<\/lastmod>/)
+  assert.match(sitemap, /<loc>https:\/\/yinming\.me\/posts<\/loc>\s*<lastmod>2026-08-30<\/lastmod>/)
   assert.match(sitemap, /<loc>https:\/\/yinming\.me\/posts\/one-person-unicorn<\/loc>\s*<lastmod>2025-03-10<\/lastmod>/)
 })
 
 test('RSS feed is generated and advertised', async () => {
   const rss = await readFile(path.join(distDir, 'rss.xml'), 'utf8')
 
-  assert.equal((rss.match(/<item>/g) || []).length, 4)
+  assert.equal((rss.match(/<item>/g) || []).length, 5)
   assert.match(rss, /<atom:link href="https:\/\/yinming\.me\/rss\.xml" rel="self" type="application\/rss\+xml"\/>/)
   assert.match(rss, /<description><!\[CDATA\[从需求发现、用户共创和创作者变化出发/)
 })

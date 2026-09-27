@@ -260,25 +260,19 @@ ${serializeJsonLd(structuredData)}
               ${siteConfig.menu.map(item => `<li>${navLink(item)}</li>`).join('\n              ')}
             </ul>
           </nav>
-          <div class="theme-toggle" role="group" aria-label="Theme">
-            <button type="button" data-theme-btn="light" title="Light mode" aria-label="Light mode">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="4.1" />
-                <path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6" />
-              </svg>
-            </button>
-            <button type="button" data-theme-btn="auto" title="Auto (system)" aria-label="Auto theme" class="active">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="12" r="7.6" fill="none" stroke="currentColor" stroke-width="1.7" />
-                <path d="M12 4.4a7.6 7.6 0 0 1 0 15.2z" fill="currentColor" />
-              </svg>
-            </button>
-            <button type="button" data-theme-btn="dark" title="Dark mode" aria-label="Dark mode">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-              </svg>
-            </button>
-          </div>
+          <button type="button" class="theme-toggle" data-theme-toggle title="Theme: auto (system) — click for light" aria-label="Theme: auto (system) — click for light">
+            <svg class="theme-toggle__icon theme-toggle__icon--light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4.1" />
+              <path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6" />
+            </svg>
+            <svg class="theme-toggle__icon theme-toggle__icon--auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="4" y="5.2" width="16" height="10.6" rx="2" />
+              <path d="M2.2 19h19.6" />
+            </svg>
+            <svg class="theme-toggle__icon theme-toggle__icon--dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+          </button>
         </div>
       </div>
     </header>
@@ -329,6 +323,33 @@ function postCard(post, index) {
           </li>`
 }
 
+// Hero contact row: the word for the page, official line marks for the
+// networks. Paths are the brand geometry drawn with strokes, no fills.
+const CONTACT_CHIPS = `<ul class="chips">
+            <li><a class="chip" href="/about">About</a></li>
+            <li>
+              <a class="chip chip--icon" href="https://x.com/kalasoo" title="X" aria-label="X">
+                <svg viewBox="0.05 0.01 23.97 23.97" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231z" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a class="chip chip--icon" href="https://t.me/kalasoo" title="Telegram" aria-label="Telegram">
+                <svg viewBox="-1.21 -1.21 26.39 26.39" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M23.91 3.79 20.3 20.84c-.25 1.21-.98 1.5-2 .94l-5.5-4.07-2.66 2.57c-.3.3-.55.56-1.1.56-.72 0-.6-.27-.84-.95L6.3 13.7l-5.45-1.7c-1.18-.35-1.19-1.16.26-1.75l21.26-8.2c.97-.43 1.9.24 1.53 1.73z" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a class="chip chip--icon" href="https://github.com/kalasoo" title="GitHub" aria-label="GitHub">
+                <svg viewBox="0.04 -0.23 23.43 23.43" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                </svg>
+              </a>
+            </li>
+          </ul>`
+
 function renderHomePage(posts) {
   const recentPosts = posts.slice(0, 10)
 
@@ -340,29 +361,18 @@ function renderHomePage(posts) {
           <div class="icon-placeholder" style="display: none;">👨‍💻</div>
         </div>
         <div class="hero__body">
-          <blockquote class="hero__quote">
-            <p>We can only see a short distance ahead, but we can see plenty there that needs to be done.</p>
-            <cite>Alan Turing</cite>
-          </blockquote>
           <p class="hero__lead">我叫<strong>阴明</strong>，我的工作致力于寻找人类与科技健康共存的方法，存续人类文明。</p>
           <p class="hero__lead hero__lead--en">My name is <strong>Yin Ming</strong>, and my work is dedicated to discovering ways for humanity and technology to coexist in harmony, thereby preserving human civilization.</p>
-          <div class="hero__contact">
-            <p class="hero__note">You can find me on</p>
-            <ul class="chips">
-              <li><a class="chip" href="https://t.me/kalasoo">Telegram</a></li>
-              <li><a class="chip" href="https://x.com/kalasoo">X</a></li>
-              <li><a class="chip" href="https://github.com/kalasoo">GitHub</a></li>
-              <li><a class="chip" href="/about">About me</a></li>
-            </ul>
-          </div>
+          <p class="hero__quote"><code>We can only see a short distance ahead, but we can see plenty there that needs to be done. — Alan Turing</code></p>
+          ${CONTACT_CHIPS}
         </div>
       </div>
     </article>
 
     <section class="section">
       <div class="section__head">
-        <h2 class="section__label">Recent Posts</h2>
-        <a class="section__link" href="/posts">All posts →</a>
+        <h2 class="section__label">Recent posts</h2>
+        <a class="section__link" href="/posts">Posts →</a>
       </div>
       <ul class="bento">
         ${recentPosts.map(postCard).join('')}
@@ -374,7 +384,7 @@ function renderHomePage(posts) {
 function renderPostsPage(posts) {
   return `
     <div class="page-head">
-      <h1>All Posts</h1>
+      <h1>Posts</h1>
     </div>
     <ul class="post-rows">
       ${posts.map(post => `
@@ -486,7 +496,7 @@ async function buildStatic() {
     post.route = route
 
     const content = renderContent(post.frontmatter, post.html, {
-      footer: { href: '/posts', label: 'All posts' }
+      footer: { href: '/posts', label: 'Posts' }
     })
     const meta = {
       description: post.frontmatter.description || extractDescription(post.html),
@@ -530,7 +540,7 @@ async function buildStatic() {
     pageClass: 'page--list',
     nav: 'posts'
   }
-  const postsHtml = getTemplate(postsContent, 'All Posts', assetPaths, postsIndexMeta)
+  const postsHtml = getTemplate(postsContent, 'Posts', assetPaths, postsIndexMeta)
   const postsIndexPath = path.join(postsDir, 'index.html')
   fs.writeFileSync(postsIndexPath, postsHtml, 'utf-8')
   console.log(`   → ${postsIndexPath}`)
