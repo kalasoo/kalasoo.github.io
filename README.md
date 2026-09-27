@@ -37,6 +37,7 @@ src/
 ├── js/
 │   ├── app.js               # Production theme and favicon runtime
 │   ├── dev-router.js        # Development-only content router
+│   ├── toc.js               # Article contents rail and scroll spy
 │   ├── config.js            # Site and SEO configuration
 │   └── rss.js               # RSS feed generation
 └── styles/
@@ -191,6 +192,11 @@ export const siteConfig = {
 - Canvas-based smooth transitions
 - Respects dark/light mode preferences
 - Pauses when tab is hidden
+
+### Contents Rail
+- Articles with three or more h1–h3 headings get a sticky contents card beside the body — `src/js/toc.js` slugifies the headings into anchors and tracks the reader with a scroll spy
+- The rail opens from 72rem up; below that the article keeps the full shell width, and the reading column simply uses the space
+- Indentation is relative to the shallowest heading in the piece, so an article written entirely in h3s is not indented as if nested
 
 ### Theme Control
 - One header button cycles auto (system) → light → dark, stored as `theme-preference`

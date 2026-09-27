@@ -3,6 +3,7 @@ import matter from 'gray-matter'
 import toml from 'toml'
 import { siteConfig } from './config.js'
 import { content } from '../content/index.js'
+import { initToc } from './toc.js'
 
 const md = new MarkdownIt({
   html: true,
@@ -36,15 +37,6 @@ function escapeHtml(value) {
 function renderDate(value) {
   const date = new Date(value)
   return `<time datetime="${date.toISOString()}">${date.toLocaleDateString('zh-CN')}</time>`
-}
-
-function excerpt(markdown, maxLength) {
-  const text = markdown
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/[#*_`>[\]()~-]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-  return text.length <= maxLength ? text : `${text.slice(0, maxLength - 3)}...`
 }
 
 function publishedEntries(prefix) {
@@ -118,12 +110,11 @@ function renderContent(route) {
         <div class="content">
           ${md.render(markdown)}
         </div>
-        ${route.startsWith('/posts/')
-          ? '<footer class="post__foot"><a class="chip" href="/posts">Posts</a></footer>'
-          : ''}
       </div>
     </article>
   `
+
+  initToc(contentDiv)
 }
 
 // Home grid: the newest post takes the full-width cover, the rest pair off, and
@@ -220,13 +211,10 @@ function renderPostsPage() {
       <h1>Posts</h1>
     </div>
     <ul class="post-rows">
-      ${posts.map(({ route, frontmatter, markdown }) => `
+      ${posts.map(({ route, frontmatter }) => `
         <li class="post-row">
           <a href="${route}">
-            <div>
-              <h2 class="post-row__title">${escapeHtml(frontmatter.title)}</h2>
-              <p class="post-row__desc">${escapeHtml(frontmatter.description || excerpt(markdown, 120))}</p>
-            </div>
+            <h2 class="post-row__title">${escapeHtml(frontmatter.title)}</h2>
             ${renderDate(frontmatter.date)}
           </a>
         </li>`).join('')}

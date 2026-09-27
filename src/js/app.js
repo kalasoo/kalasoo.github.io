@@ -1,3 +1,5 @@
+import { initToc } from './toc.js'
+
 // One compact button cycles auto → light → dark; the icon follows the pin.
 function initThemeToggle() {
   const STORAGE_KEY = 'theme-preference'
@@ -43,6 +45,8 @@ function initThemeToggle() {
 }
 
 initThemeToggle()
+
+initToc()
 
 // Animated favicon: cycles Y → M → Y
 ;(function startAnimatedFavicon() {

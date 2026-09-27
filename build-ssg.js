@@ -290,9 +290,7 @@ ${serializeJsonLd(structuredData)}
 </html>`
 }
 
-function renderContent(frontmatter, html, options = {}) {
-  const footer = options.footer
-
+function renderContent(frontmatter, html) {
   return `
     <article class="entry">
       <header class="post__head">
@@ -303,7 +301,6 @@ function renderContent(frontmatter, html, options = {}) {
         <div class="content">
           ${html}
         </div>
-        ${footer ? `<footer class="post__foot"><a class="chip" href="${footer.href}">${footer.label}</a></footer>` : ''}
       </div>
     </article>
   `
@@ -394,10 +391,7 @@ function renderPostsPage(posts) {
       ${posts.map(post => `
         <li class="post-row">
           <a href="${escapeHtml(post.route)}">
-            <div>
-              <h2 class="post-row__title">${escapeHtml(post.frontmatter.title)}</h2>
-              <p class="post-row__desc">${escapeHtml(post.frontmatter.description || extractDescription(post.html, 120))}</p>
-            </div>
+            <h2 class="post-row__title">${escapeHtml(post.frontmatter.title)}</h2>
             ${renderDate(post.frontmatter.date)}
           </a>
         </li>`).join('')}
@@ -499,9 +493,7 @@ async function buildStatic() {
     const route = `/posts/${post.filename}`
     post.route = route
 
-    const content = renderContent(post.frontmatter, post.html, {
-      footer: { href: '/posts', label: 'Posts' }
-    })
+    const content = renderContent(post.frontmatter, post.html)
     const meta = {
       description: post.frontmatter.description || extractDescription(post.html),
       url: `${siteConfig.baseURL}/posts/${post.filename}`,

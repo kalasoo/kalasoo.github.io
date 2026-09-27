@@ -585,19 +585,6 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
   text-wrap: pretty;
 }
 
-.post-row__desc {
-  grid-column: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin: .55rem 0 0;
-  max-width: 52ch;
-  color: color-mix(in srgb, currentColor 62%, transparent);
-  font-size: .92rem;
-  line-height: 1.6;
-}
-
 .post-row time {
   grid-column: 2;
   grid-row: 1;
@@ -609,6 +596,26 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 }
 
 /* ===== Article =========================================================== */
+
+/* The shell keeps its width; the rail takes its room out of the reading column
+   instead, so the article body simply measures narrower. */
+.entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+@media (min-width: 72rem) {
+  .entry {
+    grid-template-columns: minmax(0, 1fr) 14rem;
+    column-gap: clamp(1.5rem, 2.6vw, 2.5rem);
+  }
+
+  /* The title keeps the full width; the rail only sits beside the body. */
+  .entry > .post__head {
+    grid-column: 1 / -1;
+  }
+}
 
 .post {
   padding: var(--pad-card);
@@ -646,10 +653,6 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
   text-wrap: balance;
 }
 
-.post__foot {
-  margin: clamp(2.5rem, 7vw, 4rem) 0 0;
-}
-
 /* ===== Content =========================================================== */
 
 .content {
@@ -664,6 +667,15 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 
 .content > * + * {
   margin-top: 1.35em;
+}
+
+.content h1,
+.content h2,
+.content h3,
+.content h4,
+.content h5,
+.content h6 {
+  scroll-margin-top: 5.5rem;
 }
 
 .content h2,
@@ -827,6 +839,61 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
 
 .content tbody tr:nth-child(even) {
   background: var(--surface-1);
+}
+
+/* ===== Contents rail ===================================================== */
+
+/* Opens only where there is room for it; narrow readers scroll instead. */
+.toc {
+  display: none;
+}
+
+@media (min-width: 72rem) {
+  .toc {
+    display: block;
+    position: sticky;
+    top: 5.25rem;
+    max-height: calc(100vh - 7.5rem);
+    padding: clamp(1rem, 1.6vw, 1.35rem);
+    border-radius: var(--r-lg);
+    background: var(--surface-1);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .toc::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.toc__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Contrast carries the state: dim by default, full strength where you are. */
+.toc__item a {
+  display: block;
+  padding: .4rem .75rem;
+  color: var(--text-3);
+  font-size: .84rem;
+  line-height: 1.45;
+  transition: color .18s var(--ease);
+}
+
+.toc__item a:hover,
+.toc__item a[aria-current] {
+  color: var(--text-1);
+}
+
+/* Nesting reads as an indent, not as a rule */
+.toc__item[style*="--toc-depth: 1"] a {
+  padding-left: 1.45rem;
+}
+
+.toc__item[style*="--toc-depth: 2"] a {
+  padding-left: 2.15rem;
 }
 
 /* ===== 404 (client-rendered in dev) ===================================== */
