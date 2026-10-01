@@ -99,7 +99,7 @@ test('page-specific search metadata and schemas are emitted', async () => {
   const about = await readFile(path.join(distDir, 'about.html'), 'utf8')
   assert.match(about, /<title>About<\/title>/)
   assert.match(about, /<h1 class="entry__title"><span class="title-en" lang="en">About<\/span><\/h1>/)
-  assert.equal((about.match(/class="section-card"/g) || []).length, 5)
+  assert.doesNotMatch(about, /section-card/)
   assert.equal(jsonLdObjects(about)[0]['@type'], 'ProfilePage')
 
   const postsIndex = await readFile(path.join(distDir, 'posts', 'index.html'), 'utf8')

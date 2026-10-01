@@ -233,7 +233,6 @@ export const siteConfig = {
 - The theme switch lives on the board alone; other pages inherit whatever the root `data-theme` attribute says
 - The list page wears the same chrome and a hero card of its own (`5 posts`), with the rows below it
 - The body is a card, and that is where a detail page ends: a contents rail whenever the piece has three or more headings, plus a back-to-top pill once a read passes six minutes and the first screen is scrolled away
-- A page can set `sectionsAsCards = true` in its frontmatter to render each `h3` section as its own card; the about page does, so it reads as a small board too
 
 ### Theme Control
 - Auto (system) → light → dark, stored as `theme-preference`: the three-way switch sits on the home board, and every other page follows the root `data-theme` attribute it sets

@@ -886,18 +886,6 @@ a:hover {
   transform: translateY(-2px);
 }
 
-/* Section cards: a page can ask for its top-level sections to be rendered as
-   separate cards — the board language, applied to a reference page. */
-.content > .section-card {
-  padding: var(--pad-card);
-  border-radius: var(--r-xl);
-  background: var(--surface-1);
-}
-
-.content .section-card > * + * {
-  margin-top: 1.1em;
-}
-
 /* ===== Content =========================================================== */
 
 .content {

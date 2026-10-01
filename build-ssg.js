@@ -325,8 +325,7 @@ async function buildStatic() {
     const content = renderEntry({
       frontmatter: page.frontmatter,
       html: page.html,
-      minutes: readingMinutes(page.markdown),
-      sectionsAsCards: page.frontmatter.sectionsAsCards === true
+      minutes: readingMinutes(page.markdown)
     })
     const meta = {
       description: page.frontmatter.description || extractDescription(page.html),

@@ -12,16 +12,6 @@ import { titleLines } from './titles.js'
 const TOC_HEADINGS = 3
 const TOP_MINUTES = 6
 
-// A page whose own frontmatter asks for it renders each top-level section as
-// its own card — the same bubble language the home board speaks.
-function cardSections(html) {
-  return String(html)
-    .split(/(?=<h3[\s>])/)
-    .filter(part => part.trim())
-    .map(part => `<section class="section-card">\n${part.trim()}\n</section>`)
-    .join('\n')
-}
-
 // The chrome every page but the board wears: the wordmark back to the board,
 // and nothing else. It sticks to the top of the column.
 export function pageTools() {
@@ -30,7 +20,7 @@ export function pageTools() {
     </div>`
 }
 
-export function renderEntry({ frontmatter = {}, html = '', minutes = 0, sectionsAsCards = false }) {
+export function renderEntry({ frontmatter = {}, html = '', minutes = 0 }) {
   const headings = (html.match(/<h[1-3][\s>]/g) || []).length
   const showToc = headings >= TOC_HEADINGS
   const showTop = minutes >= TOP_MINUTES
@@ -49,7 +39,7 @@ export function renderEntry({ frontmatter = {}, html = '', minutes = 0, sections
       </header>
       <div class="entry__body">
         <div class="content">
-          ${sectionsAsCards ? cardSections(html) : html}
+          ${html}
         </div>
       </div>
       ${showTop ? `<button type="button" class="back-to-top" data-back-to-top hidden aria-label="回到顶部">↑</button>` : ''}

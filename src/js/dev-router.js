@@ -84,8 +84,7 @@ function renderContent(route) {
   contentDiv.innerHTML = renderEntry({
     frontmatter,
     html: md.render(markdown),
-    minutes: readingMinutes(markdown),
-    sectionsAsCards: frontmatter.sectionsAsCards === true
+    minutes: readingMinutes(markdown)
   })
 
   initToc(contentDiv)
