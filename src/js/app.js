@@ -1,52 +1,33 @@
+import { initHomeBoard } from './home-board.js'
+import { initTheme } from './theme.js'
 import { initToc } from './toc.js'
 
-// One compact button cycles auto → light → dark; the icon follows the pin.
-function initThemeToggle() {
-  const STORAGE_KEY = 'theme-preference'
-  const MODES = ['auto', 'light', 'dark']
-  const LABELS = { auto: 'auto (system)', light: 'light', dark: 'dark' }
-  const toggle = document.querySelector('[data-theme-toggle]')
+// Long reads ship a back-to-top pill; it stays hidden until the reader is past
+// the first screen, and without JavaScript it never appears at all.
+function initBackToTop() {
+  const pill = document.querySelector('[data-back-to-top]')
+  if (!pill) return
 
-  function describe(mode) {
-    const next = MODES[(MODES.indexOf(mode) + 1) % MODES.length]
-    return `Theme: ${LABELS[mode]} — click for ${LABELS[next]}`
+  const sync = () => {
+    pill.hidden = window.scrollY < window.innerHeight * 0.8
   }
 
-  function applyTheme(mode) {
-    const root = document.documentElement
-    if (mode === 'auto') {
-      root.removeAttribute('data-theme')
-    } else {
-      root.setAttribute('data-theme', mode)
-    }
-
-    if (toggle) {
-      const label = describe(mode)
-      toggle.title = label
-      toggle.setAttribute('aria-label', label)
-    }
-  }
-
-  let stored = null
-  try {
-    stored = localStorage.getItem(STORAGE_KEY)
-  } catch {}
-
-  let mode = MODES.includes(stored) ? stored : 'auto'
-  applyTheme(mode)
-
-  toggle?.addEventListener('click', () => {
-    mode = MODES[(MODES.indexOf(mode) + 1) % MODES.length]
-    try {
-      localStorage.setItem(STORAGE_KEY, mode)
-    } catch {}
-    applyTheme(mode)
+  pill.addEventListener('click', () => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
   })
+
+  sync()
+  window.addEventListener('scroll', sync, { passive: true })
 }
 
-initThemeToggle()
+initTheme()
 
 initToc()
+
+initHomeBoard()
+
+initBackToTop()
 
 // Animated favicon: cycles Y → M → Y
 ;(function startAnimatedFavicon() {

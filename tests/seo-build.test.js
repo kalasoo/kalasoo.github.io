@@ -61,10 +61,21 @@ test('every indexable page has complete, unambiguous metadata', async () => {
     assert.equal(structuredData[0]['@context'], 'https://schema.org', relativePath)
 
     if (relativePath !== 'index.html') {
-      assert.match(html, /<div class="site-title"><a href="\/">@kalasoo<\/a><\/div>/, relativePath)
+      // Every other page carries a way home: the wordmark pill. The theme
+      // switch lives on the board alone, so no other page has to ship it.
+      assert.match(html, /<a[^>]*href="\/"[^>]*>@kalasoo/, relativePath)
+
       const documentTitle = html.match(/<title>([^<]+)<\/title>/)[1]
-      const pageHeading = html.match(/<h1[^>]*>([^<]+)<\/h1>/)[1]
-      assert.equal(documentTitle, pageHeading, `${relativePath} title must match its page heading`)
+      const headingText = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)[1]
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+      for (const part of documentTitle.split('｜')) {
+        assert.ok(
+          headingText.includes(part.trim()),
+          `${relativePath}: heading "${headingText}" is missing "${part.trim()}" from the document title`
+        )
+      }
     }
   }
 })
@@ -73,18 +84,42 @@ test('page-specific search metadata and schemas are emitted', async () => {
   const home = await readFile(path.join(distDir, 'index.html'), 'utf8')
   assert.match(home, /<title>阴明 kalasoo<\/title>/)
   assert.equal(jsonLdObjects(home)[0]['@type'], 'WebSite')
+  assert.match(home, /<div class="home-board" data-home-board/)
+  assert.equal((home.match(/home-card--post/g) || []).length, 5)
+  assert.equal((home.match(/class="home-board__col[ "]/g) || []).length, 4)
+  assert.match(home, /<h1 class="profile__name">阴明<\/h1>/)
+  assert.match(home, /<p class="profile__handle">@kalasoo<\/p>/)
+  assert.equal((home.match(/home-card--utility/g) || []).length, 2)
+  assert.equal((home.match(/class="home-card home-card--jump[ "]/g) || []).length, 2)
+  assert.match(home, /home-card__jump-label">About</)
+  assert.match(home, /<span class="home-card__jump-label">Posts<\/span>/)
+  assert.equal((home.match(/data-theme-set=/g) || []).length, 3)
+  assert.doesNotMatch(home, /class="site-header"/)
 
   const about = await readFile(path.join(distDir, 'about.html'), 'utf8')
   assert.match(about, /<title>About<\/title>/)
+  assert.match(about, /<h1 class="entry__title"><span class="title-en" lang="en">About<\/span><\/h1>/)
+  assert.equal((about.match(/class="section-card"/g) || []).length, 5)
   assert.equal(jsonLdObjects(about)[0]['@type'], 'ProfilePage')
+
+  const postsIndex = await readFile(path.join(distDir, 'posts', 'index.html'), 'utf8')
+  assert.match(postsIndex, /<title>Posts<\/title>/)
+  assert.match(postsIndex, /<h1 class="entry__title">Posts<\/h1>/)
+  assert.match(postsIndex, /class="entry__label">5 posts</)
+  assert.doesNotMatch(postsIndex, /class="site-header"/)
 
   const article = await readFile(
     path.join(distDir, 'posts', 'reflections-on-vibe-coding-2025.html'),
     'utf8'
   )
   assert.match(article, /<title>2025 年的 Vibe Coding 思考｜Reflections on Vibe Coding in 2025<\/title>/)
+  assert.match(article, /<h1 class="entry__title">\s*<span class="title-zh">2025 年的 Vibe Coding 思考<\/span>\s*<span class="title-en" lang="en">Reflections on Vibe Coding in 2025<\/span>\s*<\/h1>/)
+  assert.match(article, /<p class="entry__meta">\s*<time datetime="2025-11-17T00:00:00.000Z">/)
+  assert.doesNotMatch(article, /entry__lede|entry__minutes|entry-exit/)
   const articleData = jsonLdObjects(article)[0]
   assert.equal(articleData['@type'], 'BlogPosting')
+  assert.equal(articleData.headline, '2025 年的 Vibe Coding 思考')
+  assert.equal(articleData.alternativeHeadline, 'Reflections on Vibe Coding in 2025')
   assert.equal(articleData.author.name, 'Yin Ming')
   assert.deepEqual(articleData.author.sameAs, [
     'https://github.com/kalasoo',

@@ -1,4 +1,5 @@
 import { siteConfig } from './config.js'
+import { flatTitle } from './titles.js'
 
 function escapeXml(value) {
   return String(value)
@@ -40,7 +41,7 @@ export function generateRSS(posts) {
     const description = post.frontmatter.description || excerpt(post)
 
     return `    <item>
-      <title><![CDATA[${asCdata(post.frontmatter.title)}]]></title>
+      <title><![CDATA[${asCdata(flatTitle(post.frontmatter))}]]></title>
       <link>${escapeXml(link)}</link>
       <guid isPermaLink="true">${escapeXml(link)}</guid>
       <pubDate>${pubDate}</pubDate>

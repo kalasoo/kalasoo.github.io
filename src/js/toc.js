@@ -24,6 +24,10 @@ export function initToc(root = document) {
 
   if (!entry || !content || entry.querySelector('.toc')) return
 
+  // The renderer decides whether a rail earns its room (reading time and
+  // heading count); the heading threshold below is only a fallback.
+  if (entry.dataset.toc === 'false') return
+
   const headings = [...content.querySelectorAll('h1, h2, h3')]
     .filter(heading => heading.textContent.trim())
 

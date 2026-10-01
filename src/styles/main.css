@@ -173,152 +173,372 @@ a:hover {
     clamp(4rem, 10vw, 7rem);
 }
 
-/* ===== Header ============================================================ */
+/* ===== Bilingual titles ================================================== */
 
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  padding-block: clamp(.5rem, 1.4vw, .9rem);
+/* Every content title carries two lines: Chinese first, English under it as a
+   second, quieter voice. Both lines come from src/js/titles.js, and the
+   secondary styling keys off position — only the English line that follows a
+   Chinese line shrinks and mutes — so a single-language title such as "About"
+   renders at full heading scale. */
+.title-zh,
+.title-en {
+  display: block;
 }
 
-.site-header__bar {
-  display: flex;
-  align-items: center;
-  gap: .6rem;
-  padding: .35rem .4rem .35rem 1.1rem;
-  border-radius: var(--r-pill);
-  background: var(--surface-1);
-}
-
-.site-header__bar:not(:has(.site-title)) {
-  padding-left: .4rem;
-}
-
-.site-title {
-  margin: 0;
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: -.02em;
+.title-zh + .title-en {
+  margin-top: .34em;
+  font-size: max(.68rem, .58em);
+  font-weight: 500;
+  letter-spacing: -.012em;
   line-height: 1.2;
-  white-space: nowrap;
+  color: color-mix(in srgb, currentColor 66%, transparent);
 }
 
-.site-title a {
-  color: inherit;
-  display: block;
-  padding: .45rem .25rem;
+/* ===== Home: bubble board ================================================ */
+
+/* The whole home page is one board of bubbles — a profile card, a card per
+   post and a way into the full list. Cards are sized from their own titles and
+   packed into columns of different widths. The board is full-bleed: no centred
+   column, just the site gutter around it and between its cards, so the canvas
+   reads edge to edge. Phones stack it into a normal vertical scroll; from
+   60rem it becomes a fixed-height canvas that src/js/home-board.js scrolls
+   sideways with the wheel. */
+.page--home .shell {
+  max-width: none;
+  padding: var(--gap);
 }
 
-.site-title a:hover {
-  color: var(--text-2);
-}
-
-.site-header__actions {
-  display: flex;
-  align-items: center;
-  gap: .6rem;
-  margin-left: auto;
-}
-
-.site-nav ul {
-  display: flex;
-  align-items: center;
-  gap: .15rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.site-nav a {
-  display: block;
-  padding: .55rem .8rem;
-  border-radius: var(--r-pill);
-  color: var(--text-2);
-  font-size: var(--type-label);
-  font-weight: 700;
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.site-nav a:hover {
-  color: var(--text-1);
-  background: var(--surface-2);
-}
-
-.site-nav a[aria-current="page"] {
-  color: var(--text-1);
-  background: var(--surface-3);
-}
-
-/* ===== Theme toggle ====================================================== */
-
-/* One button, three pins (auto → light → dark). The visible icon is picked in
-   CSS from the root attribute, so a pinned theme paints its icon immediately. */
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.15rem;
-  height: 2.15rem;
-  padding: 0;
-  border: 0;
-  border-radius: var(--r-pill);
-  background: var(--surface-3);
-  color: var(--text-2);
-  cursor: pointer;
-  transition: background-color .18s var(--ease), color .18s var(--ease);
-}
-
-.theme-toggle:hover {
-  color: var(--text-1);
-}
-
-.theme-toggle svg {
-  width: 1rem;
-  height: 1rem;
-}
-
-.theme-toggle__icon {
-  display: none;
-}
-
-html:not([data-theme]) .theme-toggle__icon--auto,
-html[data-theme="light"] .theme-toggle__icon--light,
-html[data-theme="dark"] .theme-toggle__icon--dark {
-  display: block;
-}
-
-/* ===== Home: hero ======================================================== */
-
+/* The shell padding alone frames the board — no double top spacing, so the
+   gaps above and below the cards match. */
 .page--home main {
-  padding-top: clamp(1rem, 4vw, 2.5rem);
+  padding-top: 0;
 }
 
-.hero {
-  padding: var(--pad-card);
-  border-radius: var(--r-xl);
-  background: var(--surface-1);
-}
-
-.hero__profile {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(1.25rem, 2.4vw, 1.9rem);
-}
-
-.hero__aside {
+.home-board {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: var(--gap);
 }
 
-.hero__avatar {
-  width: clamp(4.5rem, 9vw, 7rem);
+.home-board:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: .4rem;
+  border-radius: var(--r-lg);
+}
+
+/* On phones the column wrappers dissolve, so the cards order themselves by
+   --order and read newest first. */
+.home-board__col {
+  display: contents;
+}
+
+/* Phones, with the runtime on: the cards are packed into two columns by
+   height — a real waterfall, no fixed rows. Without the runtime the board
+   simply keeps the stack above. */
+.home-board__masonry {
+  display: flex;
+  align-items: start;
+  order: 2;
+  gap: var(--gap);
+}
+
+.home-board__masonry > .home-board__col {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  gap: var(--gap);
+}
+
+.home-board__masonry .home-card {
+  flex: 0 0 auto;
+  order: 0;
+  width: 100%;
+}
+
+/* Cards are posters, not summaries: the title set loud, the date reduced to a
+   micro-label, and the whole block flipping to the text colour on hover or
+   keyboard focus — the site's own surface language, spent on the interaction. */
+.home-card {
+  --card-pad: clamp(1.2rem, 2.2vw, 1.8rem);
+
+  position: relative;
+  order: var(--order, 0);
+  min-height: var(--card-min, 8rem);
+  border-radius: var(--r-lg);
+  background: var(--surface-1);
+  overflow: hidden;
+  transition: transform .32s var(--ease), background-color .32s var(--ease),
+    color .32s var(--ease);
+}
+
+/* Size classes: each one sets the type scale and, on wide screens, how much of
+   its column the card takes (--weight), so bigger titles get bigger bubbles. */
+.home-card--large { --card-min: clamp(10rem, 34vw, 13rem); }
+
+.home-card--medium { --card-min: clamp(8.5rem, 28vw, 11rem); }
+
+.home-card--small { --card-min: clamp(7rem, 22vw, 9rem); }
+
+.home-card > a {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--card-pad);
+  color: inherit;
+}
+
+/* The profile card is content, not a link, and leads the board: avatar and
+   name up top, the bio anchored low so the bubble reads like the posters. The
+   gap is the minimum breathing room on phones, where the auto margin has
+   nothing to absorb. */
+.home-card--profile {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2.25rem);
+  padding: var(--card-pad);
+}
+
+.profile__identity {
+  display: flex;
+  align-items: center;
+  gap: clamp(.9rem, 1.6vw, 1.1rem);
+}
+
+.profile__avatar {
+  flex: 0 0 auto;
+  width: clamp(3.75rem, 8vw, 4.5rem);
   aspect-ratio: 1;
   border-radius: 50%;
   object-fit: cover;
   background: var(--surface-2);
+}
+
+.profile__name {
+  margin: 0;
+  font-size: clamp(1.3rem, 1.6vw, 1.45rem);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
+  line-height: 1.15;
+}
+
+.profile__handle {
+  margin: .1rem 0 0;
+  color: var(--text-2);
+  font-size: .95rem;
+  line-height: 1.4;
+}
+
+/* The utility row: three equal pills, together exactly as wide as the identity
+   card above them — one row on every screen, phones included. */
+.home-utilities {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  order: var(--order, 0);
+  gap: var(--gap);
+}
+
+.home-utilities .home-card {
+  --card-min: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: clamp(3.2rem, 4.6vw, 3.6rem);
+  padding: 0;
+  color: var(--text-2);
+}
+
+/* About keeps the jump-card shape, folded into a pill and centred. */
+.home-utilities .home-card--jump {
+  padding: 0 .8rem;
+  color: inherit;
+}
+
+.home-utilities .home-card__jump-label {
+  font-size: 1.05rem;
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
+}
+
+.home-utilities .home-card__jump-arrow {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* The theme pill is the switch: three equal segments straight on the card
+   surface, the pinned one inverted — no inner track, no double surface. */
+.home-utilities .home-card--theme {
+  align-items: stretch;
+  padding: .3rem;
+}
+
+.theme-switch {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.theme-switch__option {
+  display: inline-flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: background-color .18s var(--ease), color .18s var(--ease);
+}
+
+.theme-switch__option:hover {
+  color: var(--text-1);
+}
+
+.theme-switch__option[aria-pressed="true"] {
+  background: var(--text-1);
+  color: var(--bg);
+}
+
+.theme-switch__icon {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+/* The links pill is three equal tap zones; the marks sit straight on the card
+   surface and carry the hover themselves. */
+.home-utilities .home-card--links {
+  padding: 0;
+}
+
+.home-card--links .chips {
+  align-self: stretch;
+  align-items: stretch;
+  width: 100%;
+  margin: 0;
+  gap: 0;
+}
+
+.home-card--links .chips > li {
+  display: flex;
+  flex: 1 1 0;
+}
+
+.home-card--links .chip {
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--text-2);
+}
+
+.home-card--links .chip svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.home-card--links .chip:hover {
+  background: var(--surface-2);
+  color: var(--text-1);
+}
+
+.home-card time {
+  font-size: var(--type-label);
+  font-weight: 700;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: color-mix(in srgb, currentColor 55%, transparent);
+}
+
+.home-card__title {
+  margin: auto 0 0;
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.home-card--large .home-card__title {
+  padding-top: clamp(1.25rem, 3vw, 2.25rem);
+  font-size: clamp(1.8rem, 2.6vw, 2.6rem);
+}
+
+.home-card--medium .home-card__title {
+  padding-top: 1.15rem;
+  font-size: clamp(1.45rem, 2vw, 1.9rem);
+}
+
+.home-card--small .home-card__title {
+  padding-top: .95rem;
+  font-size: clamp(1.15rem, 1.5vw, 1.45rem);
+}
+
+/* Read mark, sliding in on hover or focus */
+.home-card--post > a::after {
+  content: '\2197';
+  position: absolute;
+  top: var(--card-pad);
+  right: var(--card-pad);
+  font-size: .95rem;
+  opacity: 0;
+  transform: translateX(-.45rem);
+  transition: opacity .32s var(--ease), transform .32s var(--ease);
+}
+
+/* The way out of a card: label bottom-left with the arrow beside it, nosing up
+   and right on hover. The about pill and the full post list wear the same
+   shape, so the pair sits low like every other card's title. */
+.home-card--jump {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--card-pad);
+  color: inherit;
+}
+
+.home-card__jump-row {
+  display: flex;
+  align-items: baseline;
+  gap: .5rem;
+}
+
+.home-card__jump-label {
+  font-size: var(--type-section);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--track-title);
+}
+
+.home-card__jump-arrow {
+  font-size: 1.35rem;
+  line-height: 1;
+  transition: transform .32s var(--ease);
+}
+
+.home-card--post:hover,
+.home-card--post:focus-within,
+.home-card--jump:hover,
+.home-card--jump:focus-within {
+  background: var(--text-1);
+  color: var(--bg);
+  transform: translateY(-4px);
+}
+
+.home-card--post:hover > a::after,
+.home-card--post:focus-within > a::after {
+  opacity: 1;
+  transform: none;
+}
+
+.home-card--jump:hover .home-card__jump-arrow,
+.home-card--jump:focus-within .home-card__jump-arrow {
+  transform: translate(.3rem, -.3rem);
 }
 
 .icon-placeholder {
@@ -326,12 +546,12 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
   line-height: 1;
 }
 
-.hero__body {
-  min-width: 0;
+.profile__bio {
+  margin-top: auto;
 }
 
-.hero__lead {
-  margin: 1.5rem 0 0;
+.profile__lead {
+  margin: 0;
   color: var(--text-1);
   font-size: var(--type-lead);
   font-weight: var(--weight-display);
@@ -340,7 +560,7 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
   text-wrap: pretty;
 }
 
-.hero__lead--en {
+.profile__lead--en {
   margin-top: .7rem;
   color: var(--text-2);
   font-size: clamp(1rem, .4vw + .9rem, 1.1rem);
@@ -349,7 +569,7 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
   line-height: 1.65;
 }
 
-.hero__lead strong {
+.profile__lead strong {
   color: var(--text-1);
   font-weight: 680;
 }
@@ -394,157 +614,94 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
   height: 1.05rem;
 }
 
-/* ===== Section head ====================================================== */
-
-.section {
-  margin-top: clamp(2.25rem, 6vw, 3.5rem);
-}
-
-.section__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: var(--gap);
-  padding-inline: .35rem;
-}
-
-.section__label {
-  margin: 0;
-  font-size: var(--type-section);
-  font-weight: var(--weight-display);
-  letter-spacing: var(--track-title);
-  line-height: 1.1;
-}
-
-/* ===== Home: bento grid ================================================== */
-
-/* Cards are posters, not summaries: the title set loud, the date reduced to a
-   micro-label, and the whole block flipping to the text colour on hover or
-   keyboard focus — the site's own surface language, spent on the interaction. */
-.bento {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-auto-flow: dense;
-  gap: clamp(.5rem, .9vw, .7rem);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.post-card {
-  --card-pad: clamp(1.2rem, 2.2vw, 1.8rem);
-
-  position: relative;
-  border-radius: var(--r-lg);
-  background: var(--surface-1);
-  overflow: hidden;
-  transition: transform .32s var(--ease), background-color .32s var(--ease),
-    color .32s var(--ease);
-}
-
-.post-card > a {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: var(--card-pad);
-  color: inherit;
-}
-
-/* Read mark, sliding in on hover or focus */
-.post-card > a::after {
-  content: '\2192';
-  position: absolute;
-  top: var(--card-pad);
-  right: var(--card-pad);
-  font-size: .95rem;
-  opacity: 0;
-  transform: translateX(-.45rem);
-  transition: opacity .32s var(--ease), transform .32s var(--ease);
-}
-
-.post-card time {
-  font-size: var(--type-label);
-  font-weight: 700;
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-  color: color-mix(in srgb, currentColor 55%, transparent);
-}
-
-.post-card__title {
-  margin: auto 0 0;
-  padding-top: clamp(1.5rem, 4vw, 2.75rem);
-  font-weight: var(--weight-display);
-  letter-spacing: var(--track-title);
-  line-height: 1.05;
-  text-wrap: balance;
-}
-
-.post-card--half .post-card__title {
-  font-size: var(--type-title);
-  line-height: 1.08;
-}
-
-.post-card--cover {
-  min-height: clamp(12rem, 24vw, 18rem);
-}
-
-.post-card--cover .post-card__title {
-  font-size: var(--type-display);
-  letter-spacing: var(--track-display);
-  line-height: 1;
-}
-
-.post-card--wide .post-card__title {
-  font-size: clamp(2rem, 4vw, 3.1rem);
-  font-weight: 600;
-  letter-spacing: -.04em;
-}
-
-.post-card:hover,
-.post-card:focus-within {
-  background: var(--text-1);
-  color: var(--bg);
-  transform: translateY(-4px);
-}
-
-.post-card:hover > a::after,
-.post-card:focus-within > a::after {
-  opacity: 1;
-  transform: none;
-}
-
-@media (min-width: 40rem) {
-  .bento {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .post-card--cover,
-  .post-card--wide {
-    grid-column: span 2;
-  }
-}
-
+/* Wide screens: the board becomes a fixed-height canvas whose columns scroll
+   sideways. Cards take a share of their column height in proportion to their
+   weight, so every column stays full and only the bubble sizes differ. */
 @media (min-width: 60rem) {
-  .bento {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    grid-auto-rows: minmax(13rem, auto);
+  .page--home .shell {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
   }
 
-  .post-card--cover,
-  .post-card--wide {
-    grid-column: span 6;
+  .page--home main,
+  .page--home #content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
   }
 
-  .post-card--half {
-    grid-column: span 3;
+  .home-board {
+    --col-w: clamp(17rem, 26vw, 24rem);
+
+    /* The padding is headroom for the hover lift: cards rise 4px, and the
+       board would otherwise clip the top row against its own edge. */
+    padding-block: 8px;
+    flex-direction: row;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .home-board::-webkit-scrollbar {
+    display: none;
+  }
+
+  .home-board__col {
+    display: grid;
+    grid-template-rows: var(--rows);
+    flex: 1 0 var(--col-w);
+    gap: var(--gap);
+    min-height: 0;
+    scroll-snap-align: start;
+  }
+
+  /* Columns are not all cut to the same width: the profile leads, then the
+     board alternates wide and normal columns. */
+  .home-board__col--wide {
+    flex-basis: calc(var(--col-w) * 1.18);
+  }
+
+  .home-board__col--profile {
+    flex-basis: calc(var(--col-w) * 1.45);
+  }
+
+  .home-card {
+    order: 0;
+    min-height: 0;
+  }
+}
+
+/* Short viewports: the identity bubble tightens its type rather than clipping
+   inside the fixed-height board. */
+@media (min-width: 60rem) and (max-height: 44rem) {
+  .profile__avatar {
+    width: 3rem;
+  }
+
+  .profile__lead {
+    font-size: 1.05rem;
+    line-height: 1.3;
+  }
+
+  .profile__lead--en {
+    font-size: .9rem;
+    line-height: 1.5;
   }
 }
 
 /* ===== Posts index ======================================================= */
 
-.page-head {
-  margin: clamp(1.25rem, 3.5vw, 2.5rem) 0 clamp(1.25rem, 2.6vw, 1.75rem);
+/* The list is a board of rows too: the hero card, then the rows. */
+.page--list #content {
+  display: grid;
+  gap: var(--gap);
 }
 
 .post-rows {
@@ -595,45 +752,27 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
   color: color-mix(in srgb, currentColor 55%, transparent);
 }
 
-/* ===== Article =========================================================== */
+/* ===== Detail pages ====================================================== */
 
-/* The shell keeps its width; the rail takes its room out of the reading column
-   instead, so the article body simply measures narrower. */
-.entry {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: start;
+/* Detail pages drop the header bar for two floating pills: the wordmark back
+   to the board, and the theme switch. They stick to the top of the column. */
+.page-tools {
+  position: sticky;
+  top: clamp(.5rem, 1.4vw, .9rem);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap);
+  margin-bottom: clamp(1rem, 2.6vw, 1.75rem);
 }
 
-@media (min-width: 72rem) {
-  .entry {
-    grid-template-columns: minmax(0, 1fr) 14rem;
-    column-gap: clamp(1.5rem, 2.6vw, 2.5rem);
-  }
-
-  /* The title keeps the full width; the rail only sits beside the body. */
-  .entry > .post__head {
-    grid-column: 1 / -1;
-  }
-}
-
-.post {
-  padding: var(--pad-card);
-  border-radius: var(--r-xl);
-  background: var(--surface-1);
-}
-
-.post__head {
-  margin: clamp(1.25rem, 3.5vw, 2.5rem) 0 clamp(1.25rem, 2.6vw, 1.75rem);
-}
-
-.post__meta {
-  margin: 0 0 1rem;
-}
-
-.post__meta time {
-  display: inline-block;
-  padding: .38rem .85rem;
+.page-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  min-height: 2.6rem;
+  padding: .45rem 1rem;
   border-radius: var(--r-pill);
   background: var(--surface-1);
   color: var(--text-2);
@@ -643,14 +782,120 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
   text-transform: uppercase;
 }
 
-.page-head h1,
-.post__head h1 {
+.page-pill:hover {
+  color: var(--text-1);
+}
+
+.page-pill__arrow {
+  font-size: .95rem;
+  transition: transform .32s var(--ease);
+}
+
+.page-pill:hover .page-pill__arrow {
+  transform: translate(.2rem, -.2rem);
+}
+
+/* The entry: a hero card, the body card, and exit cards that keep the reader
+   moving. The rail (when the renderer allows one) sits beside the body. */
+.entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gap);
+  align-items: start;
+}
+
+.entry__hero {
+  padding: clamp(1.5rem, 3.4vw, 2.6rem);
+  border-radius: var(--r-xl);
+  background: var(--surface-1);
+}
+
+.entry__meta {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  margin: 0 0 1.1rem;
+  color: var(--text-3);
+  font-size: var(--type-label);
+  font-weight: 700;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+}
+
+.entry__title {
   margin: 0;
   font-size: var(--type-display);
   font-weight: var(--weight-display);
   letter-spacing: var(--track-display);
   line-height: 1.02;
   text-wrap: balance;
+}
+
+.entry__body {
+  padding: var(--pad-card);
+  border-radius: var(--r-xl);
+  background: var(--surface-1);
+}
+
+@media (min-width: 72rem) {
+  .entry {
+    grid-template-columns: minmax(0, 1fr) 14rem;
+    column-gap: clamp(1.5rem, 2.6vw, 2.5rem);
+  }
+
+  /* The hero keeps the full width; the rail only sits beside the body,
+     wherever the runtime appends it. */
+  .entry__hero {
+    grid-column: 1 / -1;
+  }
+
+  .entry > .toc {
+    grid-row: 2;
+    grid-column: 2;
+  }
+}
+
+/* Long reads: a small pill back to the top, hidden until the reader is past
+   the first screen. Without JavaScript it never shows. */
+.back-to-top {
+  position: fixed;
+  right: clamp(1rem, 2.4vw, 1.6rem);
+  bottom: clamp(1rem, 2.4vw, 1.6rem);
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: var(--surface-1);
+  color: var(--text-2);
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: color .18s var(--ease), transform .18s var(--ease);
+}
+
+.back-to-top[hidden] {
+  display: none;
+}
+
+.back-to-top:hover {
+  color: var(--text-1);
+  transform: translateY(-2px);
+}
+
+/* Section cards: a page can ask for its top-level sections to be rendered as
+   separate cards — the board language, applied to a reference page. */
+.content > .section-card {
+  padding: var(--pad-card);
+  border-radius: var(--r-xl);
+  background: var(--surface-1);
+}
+
+.content .section-card > * + * {
+  margin-top: 1.1em;
 }
 
 /* ===== Content =========================================================== */
@@ -918,52 +1163,8 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
   color: var(--text-2);
 }
 
-/* ===== Wider viewports ================================================== */
-
-@media (min-width: 48rem) {
-  .hero__profile {
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: start;
-  }
-}
-
-/* Narrow screens: wordmark + theme control on row one, links below */
+/* Narrow screens: the list rows tighten up */
 @media (max-width: 34rem) {
-  .site-header__bar {
-    flex-wrap: wrap;
-    row-gap: .3rem;
-    padding: .3rem .35rem .3rem .85rem;
-    border-radius: var(--r-lg);
-  }
-
-  .site-header__bar:not(:has(.site-title)) {
-    padding-left: .35rem;
-  }
-
-  .site-title {
-    font-size: .95rem;
-  }
-
-  .site-nav ul {
-    gap: 0;
-  }
-
-  .site-nav a {
-    padding: .6rem .5rem;
-    font-size: .62rem;
-    letter-spacing: .06em;
-  }
-
-  .theme-toggle {
-    width: 1.95rem;
-    height: 1.95rem;
-  }
-
-  .theme-toggle svg {
-    width: .95rem;
-    height: .95rem;
-  }
-
   .post-row > a {
     gap: .3rem .9rem;
   }
@@ -984,7 +1185,8 @@ html[data-theme="dark"] .theme-toggle__icon--dark {
     animation-iteration-count: 1 !important;
   }
 
-  .post-card:hover,
+  .home-card--post:hover,
+  .home-card--jump:hover,
   .post-row > a:hover {
     transform: none;
   }

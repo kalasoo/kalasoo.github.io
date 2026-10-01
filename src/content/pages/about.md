@@ -1,6 +1,7 @@
 +++
-title = "About"
+titleEn = "About"
 description = "阴明（Yin Ming）的经历、项目、联系方式、兴趣、投资记录与开源活动。"
+sectionsAsCards = true
 +++
 
 ### Experience

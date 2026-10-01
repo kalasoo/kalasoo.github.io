@@ -1,5 +1,6 @@
 +++
-title = '不要开会｜No Meetings'
+titleZh = '不要开会'
+titleEn = 'No Meetings'
 date = '2026-08-30'
 +++
 

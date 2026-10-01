@@ -21,18 +21,6 @@ export const siteConfig = {
     rss: 'https://yinming.me/rss.xml'
   },
   
-  // Navigation menu
-  menu: [
-    {
-      title: 'about',
-      url: '/about'
-    },
-    {
-      title: 'posts',
-      url: '/posts'
-    }
-  ],
-  
   // Theme settings
   theme: {
     showDescription: false,

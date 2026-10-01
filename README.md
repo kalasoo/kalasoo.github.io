@@ -24,6 +24,7 @@ A lightweight, fast personal blog built with Vite and vanilla JavaScript with st
 - **Simple deployment**: One command to build and deploy
 - **Animated favicon**: Cycles between 'Y' and 'M' letters
 - **Bilingual support**: Chinese (zh-CN) primary with English content
+- **Bubble board home**: the whole home page is one board of content-sized cards — profile, latest posts, and a link into the full list — packed into columns of different widths, scrolling sideways on desktops and stacking on phones (`src/js/home-board.js`)
 - **SEO-friendly**: Static generation with proper meta tags and structured HTML
 
 ## Project Structure
@@ -37,7 +38,15 @@ src/
 ├── js/
 │   ├── app.js               # Production theme and favicon runtime
 │   ├── dev-router.js        # Development-only content router
+│   ├── home.js              # Home bubble board markup (shared with the SSG)
+│   ├── home-board.js        # Board runtime: rolled sizes, wheel input, phone waterfall
+│   ├── entry.js             # Page chrome, hero, exit cards (shared with the SSG)
+│   ├── list.js              # Full post list markup (shared with the SSG)
+│   ├── reading.js           # Reading-time estimate
+│   ├── theme.js             # Theme switch markup and runtime
+│   ├── html.js              # Shared HTML escaping and <time> rendering
 │   ├── toc.js               # Article contents rail and scroll spy
+│   ├── titles.js            # Bilingual title lines and flat metadata titles
 │   ├── config.js            # Site and SEO configuration
 │   └── rss.js               # RSS feed generation
 └── styles/
@@ -119,7 +128,7 @@ npm run deploy
 
 ### New Blog Post
 1. Create new `.md` file in `src/content/posts/`
-2. Add TOML frontmatter with title, search metadata, date, and draft status
+2. Add TOML frontmatter with bilingual titles (`titleZh` / `titleEn`), search metadata, date, and draft status
 3. Run `npm run dev` to see changes immediately (auto-detected by `src/content/index.js`)
 4. Run `npm run build` to generate static HTML
 
@@ -150,12 +159,19 @@ Place in `public/` directory and reference with `/filename.ext`
 
 ```toml
 +++
-title = "Post Title"
+titleZh = "中文标题"
+titleEn = "English Title"
 description = "A specific summary for search and social previews."
 date = "2024-01-01"
 draft = false
 +++
 ```
+
+Blog post titles are bilingual: `titleZh` and `titleEn` render as two stacked
+lines in the article header, home cards and the posts list (Chinese leading,
+English muted beneath it). Single-language pages such as `about` fill just one
+field and render one line. Line-bound metadata — the browser title, RSS,
+`og:title` and JSON-LD — joins a post's two titles with a `｜` bar.
 
 ### Markdown Content
 - Standard markdown syntax
@@ -198,10 +214,31 @@ export const siteConfig = {
 - The rail opens from 72rem up; below that the article keeps the full shell width, and the reading column simply uses the space
 - Indentation is relative to the shallowest heading in the piece, so an article written entirely in h3s is not indented as if nested
 
+### Home Bubble Board
+- The home page is pure board, with no chrome of its own: it renders an identity card (avatar, 阴明 / @kalasoo and the bilingual bio), utility bubbles, one card per recent post, and an index card linking to `/posts`
+- Under the identity card sits one row of three equal pills, together exactly as wide as the identity card above them — the row stays three across on phones, where the pills just get narrower
+- Those pills are the controls themselves, with no surface inside a surface: the theme switch's three segments (Light | System | Dark) sit straight on the card, and the X / Telegram / GitHub marks are the links card's three equal tap zones. Navigation cards (About, Posts) keep their label low-left like every other card, with a `↗` beside it — the same arrow the read mark uses on a hovered post
+- The build only writes a *floor* per post into `data-floor` (title length, so a long bilingual title is never squeezed into a small bubble). The runtime rolls the rest: on wide screens a pool with a fixed mix — two big, two medium, two small — is shuffled over the posts on **every visit**, each card's height share jitters around its class, and the newest two stay at medium or above to lead the board. Phones skip the roll and the size vocabulary entirely — one size for every card
+- Phones pack the same cards into two columns by height (`src/js/home-board.js`) — a real waterfall, cards falling into whichever column is shorter, not rows of equal height. Mobile also drops the size vocabulary: every card takes the same class, so the heights come from the titles alone. The identity card and the utility pills stay full width above the waterfall, and without JS the board falls back to the plain stacked list (the build-time columns dissolve via `display: contents` and each card carries `--order`, newest first)
+- Switching breakpoints moves the cards between the two arrangements, and the waterfall re-packs on resize; a dev re-render simply re-initialises the board
+- The board carries 8px of vertical padding as headroom for the 4px hover lift, so a card in the top row is never sliced by the track's own overflow
+- Columns are not all the same width — the identity column leads at 1.45×, then wide and normal columns alternate — and each column declares its own row rhythm (`minmax(min-content, 3fr)`-style rows), so a card's share of the column is exact, no column has holes, and a short viewport shrinks the profile text rather than clipping the controls
+- The board is full-bleed rather than a centred column: the shell drops its max-width and uses the site gutter (`--gap`) on every side and between cards, so the gaps above, below and between the bubbles match
+- From 60rem the board becomes a fixed-height canvas that scrolls sideways: `src/js/home-board.js` spends wheel and trackpad input sideways, relaxes scroll snapping while the wheel moves and re-arms it on settle, so the board lands on a column
+- The board is a focusable scroll region, so arrow keys walk it column by column once it has focus
+
+### Detail Pages
+- Every page but the board opens with one floating pill — `@kalasoo ↗`, back to the board — sticking to the top of the column; there is no header bar and no second pill
+- The hero card carries the piece's identity and nothing else: the date, and the title in both languages. No reading-time badge, no generated summary — the description stays in the metadata where it belongs
+- The theme switch lives on the board alone; other pages inherit whatever the root `data-theme` attribute says
+- The list page wears the same chrome and a hero card of its own (`5 posts`), with the rows below it
+- The body is a card, and that is where a detail page ends: a contents rail whenever the piece has three or more headings, plus a back-to-top pill once a read passes six minutes and the first screen is scrolled away
+- A page can set `sectionsAsCards = true` in its frontmatter to render each `h3` section as its own card; the about page does, so it reads as a small board too
+
 ### Theme Control
-- One header button cycles auto (system) → light → dark, stored as `theme-preference`
+- Auto (system) → light → dark, stored as `theme-preference`: the three-way switch sits on the home board, and every other page follows the root `data-theme` attribute it sets
 - Follows the OS by default; a pinned theme is applied before first paint
-- The active icon is chosen in CSS from the root `data-theme` attribute
+- The button's active icon is chosen in CSS from the root `data-theme` attribute; the switch marks its own segment with `aria-pressed`
 
 ### Typography
 - Schibsted Grotesk (SIL OFL, `public/fonts`) is self-hosted as one variable file and preloaded on every page, so every weight the site uses (400–900) comes from a single request
@@ -211,6 +248,7 @@ export const siteConfig = {
 ### Bilingual Support
 - Chinese (zh-CN) as primary language
 - English content mixed throughout
+- Post titles are split into `titleZh` / `titleEn` and rendered as two stacked lines — English tagged with `lang="en"` — via `src/js/titles.js`; page headings (`Posts`, `About`) stay single-line and metadata keeps the single-line `中文｜English` form
 - Date formatting in Chinese locale
 
 ### Performance Optimizations
@@ -268,6 +306,6 @@ export const siteConfig = {
 ## Customization
 
 - **Styling**: Edit `src/styles/main.css`
-- **Navigation**: Edit the `siteConfig.menu` entries in `src/js/config.js` (the dev entry `index.html` mirrors the same links)
+- **Navigation**: the pills live in `pageTools()` (`src/js/entry.js`); there is no header bar
 - **Site config**: Edit `src/js/config.js` for site-wide settings
 - **Content**: Add new posts/pages in `src/content/` directories
